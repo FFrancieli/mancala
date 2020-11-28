@@ -19,6 +19,8 @@ repositories {
 dependencies {
     developmentOnly group: 'org.springframework.boot', name: 'spring-boot-devtools', version: springBootVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: springBootVersion
+
 
     compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
 
@@ -30,9 +32,43 @@ dependencies {
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.18.1'
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
+}
 
+sourceSets {
+    integrationTest {
+        java.srcDir file('src/integrationTest/java')
+        resources.srcDir file('src/integrationTest/resources')
+        compileClasspath += sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+idea {
+    module {
+        def integrationTestFile = file('src/integrationTest/java')
+
+        sourceDirs -= integrationTestFile
+        testSourceDirs += integrationTestFile
+    }
 }
 
 test {
+    useJUnitPlatform()
+}
+
+
+task integrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    mustRunAfter test
+}
+
+check.dependsOn integrationTest
+
+integrationTest {
     useJUnitPlatform()
 }
