@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static assertions.custom.PitAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
+
 
 class BoardTest {
     private static final int NUMBER_OF_SEEDS_PER_PIT = 6;
@@ -35,11 +37,11 @@ class BoardTest {
         assertThat(regularPits).hasSize(TOTAL_AMOUNT_REGULAR_PITS);
 
         regularPits.forEach(pit ->
-                assertThat(pit.getAmountOfSeeds()).isEqualTo(NUMBER_OF_SEEDS_PER_PIT));
+                assertThat(pit).amountOfSeedsIs(NUMBER_OF_SEEDS_PER_PIT));
     }
 
     @Test
-    void mustHave2KalahWithoutSeeds() {
+    void mustHaveTwoKalahWithoutSeeds() {
         Board board = new Board(NUMBER_OF_SEEDS_PER_PIT);
 
         List<Pit> kalah = board.getPits()
@@ -49,7 +51,6 @@ class BoardTest {
 
         assertThat(kalah).hasSize(TOTAL_AMOUNT_OF_KALAH);
 
-        kalah.forEach(pit ->
-                assertThat(pit.getAmountOfSeeds()).isZero());
+        kalah.forEach(pit -> assertThat(pit).hasZeroSeeds());
     }
 }

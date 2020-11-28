@@ -2,7 +2,7 @@ package kalah.game.models;
 
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static assertions.custom.PitAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PitTest {
@@ -13,14 +13,14 @@ class PitTest {
     void amountOfSeedsIsEqualToZeroWhenNoInitialAmountIsGivenOnConstructor() {
         Pit pit = new Pit(PitType.KALAH, 6);
 
-        assertThat(pit.getAmountOfSeeds()).isZero();
+        assertThat(pit).hasZeroSeeds();
     }
 
     @Test
     void amountOfSeedsIsTheSameAsProvidedOnConstructor() {
         Pit pit = new Pit(PitType.REGULAR, 6, AMOUNT_OF_SEEDS);
 
-        assertThat(pit.getAmountOfSeeds()).isEqualTo(AMOUNT_OF_SEEDS);
+        assertThat(pit).amountOfSeedsIs(AMOUNT_OF_SEEDS);
     }
 
     @Test
