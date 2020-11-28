@@ -3,7 +3,7 @@ package kalah.game.models;
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class Pit {
-    public static final int EMPTY_PIT = 0;
+    private static final int EMPTY_PIT = 0;
     private final PitType pitType;
     private final int index;
     private int amountOfSeeds;
@@ -32,5 +32,13 @@ public class Pit {
 
     public int getAmountOfSeeds() {
         return amountOfSeeds;
+    }
+
+    public PitType getPitType() {
+        return pitType;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }
