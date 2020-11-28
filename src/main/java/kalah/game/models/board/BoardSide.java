@@ -1,4 +1,4 @@
-package kalah.game.models;
+package kalah.game.models.board;
 
 public enum BoardSide {
     SOUTH(0, 6),
