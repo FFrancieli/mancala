@@ -1,8 +1,10 @@
 package kalah.game.models;
 
+import java.io.Serializable;
+
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class Pit {
+public class Pit implements Serializable {
     private static final int EMPTY_PIT = 0;
     private final PitType pitType;
     private final int index;

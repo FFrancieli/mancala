@@ -3,10 +3,11 @@ package kalah.game.models;
 import kalah.game.models.board.BoardSide;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
-public class Player {
+public class Player implements Serializable {
 
     private final String name;
     private final BoardSide boardSide;
