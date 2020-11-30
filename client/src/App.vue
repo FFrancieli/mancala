@@ -1,18 +1,18 @@
 <template>
-  <Board/>
+  <GamePage/>
 </template>
 
 <script>
-import Board from './components/Board.vue'
+import GamePage from "@/components/GamePage";
 
 export default {
   name: 'App',
   components: {
-    Board
+    GamePage
   }
 }
 </script>
 
 <style>
-  @import './assets/style.css';
+@import './assets/style.css';
 </style>

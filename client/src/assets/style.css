@@ -3,11 +3,12 @@ html, body {
 }
 
 .board {
+    position: relative;
     display: flex;
     background-color: SaddleBrown;
     height: 200px;
     width: 800px;
-    border-radius: 50px;
+    border-radius: 25px;
     padding: 30px;
 }
 
@@ -40,13 +41,6 @@ html, body {
     border-radius: 50px;
 }
 
-.bead {
-    position: absolute;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-}
-
 .pit-seeds {
     position: absolute;
     top: 15%;
@@ -64,3 +58,48 @@ html, body {
     top: 30%;
     left: 45%;
 }
+
+.clicable-row {
+    border-color: khaki;
+    border-style: dashed;
+}
+
+.current-player {
+    height: 9px;
+    width: 795px;
+    border-radius: 25px;
+    padding: 30px;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.08);
+    border-style: solid;
+    text-align: center;
+    font-family: Geneva;
+    color: SaddleBrown;
+    font-weight: bold;
+}
+
+.container {
+    padding: 18px;
+    margin: 10px;
+    justify-items: center;
+    height: 350px;
+    width: 850px;
+}
+
+.player-bottom {
+    bottom: 0;
+    right: 50%;
+}
+
+.player-top {
+    top: 0;
+    right: 50%;
+}
+
+.player-name {
+    position: absolute;
+    color: aliceblue;
+    font-size: 20px;
+}
+
+

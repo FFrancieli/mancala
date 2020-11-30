@@ -1,115 +1,46 @@
 <template>
-  <div class="board">
-    <div class="section endsection">
-      <div class="pit" id="north-side-kalah">
-        <p class="pit-font kalah-seeds"> {{ northOrientationKalah.amountOfSeeds }}</p>
-      </div>
-    </div>
+  <div class="board" id="kalah-board">
+    <Kalah :amount-of-seeds="northOrientationKalah.amountOfSeeds"></Kalah>
     <div class="section midsection">
-      <div class="midrow topmid">
-        <div class="pit" v-for="pit in northSideOrientationPits" :key="pit.index">
-          <p class="pit-seeds pit-font">{{ pit.amountOfSeeds }}</p>
-        </div>
+      <div class="player-top player-name">
+        {{ playerAssignedToNorthSideOfTheBoard.name }}
       </div>
-      <div class="midrow botmid">
-        <div class="pit" v-for="pit in southSideOrientationPits" :key="pit.index">
-          <p class="pit-seeds pit-font">{{ pit.amountOfSeeds }}</p>
-        </div>
-      </div>
+      <PitRow :pits="northSideOrientationPits"
+              :assigned-to-player="playerAssignedToNorthSideOfTheBoard"
+              :current-player="currentPlayer"/>
+
+      <PitRow :pits="southSideOrientationPits"
+              :assigned-to-player="playerAssignedToSouthSideOfTheBoard"
+              :current-player="currentPlayer"/>
     </div>
-    <div class="section endsection">
-      <div class="pit" id="mt">
-        <p class="pit-font kalah-seeds"> {{ southOrientationKalah.amountOfSeeds }}</p>
-      </div>
+    <Kalah :amount-of-seeds="southOrientationKalah.amountOfSeeds"></Kalah>
+    <div class="player-bottom player-name">
+      {{ playerAssignedToSouthSideOfTheBoard.name }}
     </div>
   </div>
 </template>
 
 <script>
+import PitRow from "@/components/PitRow";
+import Kalah from "@/components/Kalah";
+
 export default {
   name: 'Board',
-  data() {
-    return {
-      "pits": [
-        {
-          "pitType": "REGULAR",
-          "index": 0,
-          "amountOfSeeds": 4
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 1,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 2,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 3,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 4,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 5,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "KALAH",
-          "index": 6,
-          "amountOfSeeds": 0
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 7,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 8,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 9,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 10,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 11,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "REGULAR",
-          "index": 12,
-          "amountOfSeeds": 6
-        },
-        {
-          "pitType": "KALAH",
-          "index": 13,
-          "amountOfSeeds": 2
-        }
-      ]
+  props: {
+    currentPlayer: String,
+    players: {
+      type: Array,
+      required: true
+    },
+    pits: {
+      type: Array,
+      required: true
     }
   },
+  components: {Kalah, PitRow},
   computed: {
     northSideOrientationPits() {
-      return this.pits.filter(pit => pit.index > 6 && pit.index !== 13)
-          .sort(function (a, b) {
-            return a.index - b.index
-          });
+      return this.pits.filter(pit => pit.index > 6 && pit.index !== 13);
     },
 
     northOrientationKalah() {
@@ -119,11 +50,16 @@ export default {
     southOrientationKalah() {
       return this.pits.filter(pit => pit.index === 6)[0];
     },
+
     southSideOrientationPits() {
-      return this.pits.filter(pit => pit.index <= 5)
-          .sort(function (a, b) {
-            return a.index - b.index
-          });
+      return this.pits.filter(pit => pit.index <= 5);
+    },
+
+    playerAssignedToNorthSideOfTheBoard() {
+      return this.players.filter(player => player.orientation === "NORTH")[0];
+    },
+    playerAssignedToSouthSideOfTheBoard() {
+      return this.players.filter(player => player.orientation === "SOUTH")[0];
     }
   }
 }
