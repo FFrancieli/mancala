@@ -21,8 +21,9 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: springBootVersion
 
-
+    compile group: 'redis.clients', name: 'jedis', version: '3.3.0'
     compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
+    compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 
     providedCompile group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
