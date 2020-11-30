@@ -15,7 +15,8 @@ public class Pit {
     }
 
     public Pit(PitType pitType, int index, int amountOfSeeds) {
-        checkArgument(kalahHasValidAmountOfSeeds(pitType, amountOfSeeds), invalidInitialAmountOfSeedsOnKalahMessageWrapper(amountOfSeeds));
+        checkArgument(kalahHasValidAmountOfSeeds(pitType, amountOfSeeds),
+                invalidInitialAmountOfSeedsOnKalahMessageWrapper(amountOfSeeds));
 
         this.pitType = pitType;
         this.index = index;
