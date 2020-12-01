@@ -1,7 +1,7 @@
 <template>
   <div class="midrow">
     <div class="pit" :class="isPlayerTurn ? 'clicable-row' : '' " v-for="pit in pits" :key="pit.index">
-      <p class="pit-seeds pit-font">{{ pit.amountOfSeeds }}</p>
+      <p class="pit-seeds pit-font">{{ pit.totalSeeds }}</p>
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     isPlayerTurn() {
-      return this.assignedToPlayer.name === this.currentPlayer;
+      return this.assignedToPlayer === this.currentPlayer;
     }
   }
 }

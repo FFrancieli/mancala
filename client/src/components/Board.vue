@@ -1,9 +1,9 @@
 <template>
   <div class="board" id="kalah-board">
-    <Kalah :amount-of-seeds="northOrientationKalah.amountOfSeeds"></Kalah>
+    <Kalah :amount-of-seeds="northOrientationKalah"></Kalah>
     <div class="section midsection">
       <div class="player-top player-name">
-        {{ playerAssignedToNorthSideOfTheBoard.name }}
+        {{ playerAssignedToNorthSideOfTheBoard }}
       </div>
       <PitRow :pits="northSideOrientationPits"
               :assigned-to-player="playerAssignedToNorthSideOfTheBoard"
@@ -13,9 +13,9 @@
               :assigned-to-player="playerAssignedToSouthSideOfTheBoard"
               :current-player="currentPlayer"/>
     </div>
-    <Kalah :amount-of-seeds="southOrientationKalah.amountOfSeeds"></Kalah>
+    <Kalah :amount-of-seeds="southOrientationKalah"></Kalah>
     <div class="player-bottom player-name">
-      {{ playerAssignedToSouthSideOfTheBoard.name }}
+      {{ playerAssignedToSouthSideOfTheBoard }}
     </div>
   </div>
 </template>
@@ -42,24 +42,20 @@ export default {
     northSideOrientationPits() {
       return this.pits.filter(pit => pit.index > 6 && pit.index !== 13);
     },
-
     northOrientationKalah() {
-      return this.pits.filter(pit => pit.index === 13)[0];
+      return this.pits.filter(pit => pit.index === 13)[0].totalSeeds;
     },
-
     southOrientationKalah() {
-      return this.pits.filter(pit => pit.index === 6)[0];
+      return this.pits.filter(pit => pit.index === 6)[0].totalSeeds;
     },
-
     southSideOrientationPits() {
       return this.pits.filter(pit => pit.index <= 5);
     },
-
     playerAssignedToNorthSideOfTheBoard() {
-      return this.players.filter(player => player.orientation === "NORTH")[0];
+      return this.players.filter(player => player.boardSide === "NORTH")[0].name
     },
     playerAssignedToSouthSideOfTheBoard() {
-      return this.players.filter(player => player.orientation === "SOUTH")[0];
+      return this.players.filter(player => player.boardSide === "SOUTH")[0].name;
     }
   }
 }
