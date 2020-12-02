@@ -3,6 +3,8 @@ package kalah.game.models;
 import com.google.common.annotations.VisibleForTesting;
 import kalah.game.models.board.BoardSide;
 import kalah.game.models.board.PitsInitializer;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -14,6 +16,7 @@ import java.util.List;
 @Getter
 @RedisHash("Game")
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Game implements Serializable {
 
     @Id
@@ -36,6 +39,10 @@ public class Game implements Serializable {
         this.secondPlayer = new Player(secondPlayerName, BoardSide.NORTH);
         this.currentPlayer = firstPlayer;
         this.pits = pits;
+    }
+
+    public Game replace(Player currentPlayer) {
+        return new Game(this.id, this.firstPlayer, this.secondPlayer, currentPlayer, this.pits);
     }
 
     public boolean isCurrentPlayerOpponentsKalah(int kalahIndex) {

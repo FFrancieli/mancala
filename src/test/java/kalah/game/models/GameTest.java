@@ -100,4 +100,13 @@ class GameTest {
 
         assertThat(currentPlayer).isEqualTo(game.getFirstPlayer());
     }
+
+    @Test
+    void replaceCurrentUser() {
+        Game game = new Game(FIRST_PLAYER_NAME, SECOND_PLAYER_NAME, SEEDS_ON_PIT);
+
+        Game gameWithNewCurrentPlayer = game.replace(game.getSecondPlayer());
+
+        assertThat(gameWithNewCurrentPlayer.getCurrentPlayer()).isEqualTo(game.getSecondPlayer());
+    }
 }

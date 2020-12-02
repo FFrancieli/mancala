@@ -84,8 +84,12 @@ public class Pit implements Serializable {
     }
 
     public boolean isAssignedTo(Player player) {
-//        pit.getIndex() >= boardSide.getFirstPitIndex() && boardSide.getKalahIndex() >= pit.getIndex();
         BoardSide playerBoardSide = player.getBoardSide();
+
         return index >= playerBoardSide.getFirstPitIndex() && playerBoardSide.getKalahIndex() >= index;
+    }
+
+    public boolean isKalah() {
+        return this.pitType.isKalah();
     }
 }

@@ -176,4 +176,18 @@ class PitTest {
                 Arguments.of(BoardSide.SOUTH, new Pit(PitType.KALAH, 13))
         );
     }
+
+    @Test
+    void returnsTrueWhenPitTypeIsKalah() {
+        Pit pit = new Pit(PitType.KALAH, 0);
+
+        assertThat(pit.isKalah()).isTrue();
+    }
+
+    @Test
+    void returnsFalseWhenPitTypeIsRegular() {
+        Pit pit = new Pit(PitType.REGULAR, 0);
+
+        assertThat(pit.isKalah()).isFalse();
+    }
 }
