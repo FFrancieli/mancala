@@ -10,7 +10,6 @@ import kalah.game.repository.GameRepository;
 import kalah.game.seeds.SeedsSower;
 import kalah.game.seeds.SowingResult;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -25,6 +24,7 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -140,12 +140,12 @@ class GameServiceTest {
     }
 
     @Test
-    @Disabled
-    void currentPlayerChangesWhenLastSowedSeedsLandsOnRegularKalah() {
-        when(gameRepository.findById(GAME_ID)).thenReturn(Optional.of(GAME));
+    void currentPlayerChangesWhenLastSowedSeedsLandsOnRegularPit() {
+        Game game = new Game(FIRST_PLAYER_NAME, SECOND_PLAYER_NAME, SEEDS_PER_PIT);
+        when(gameRepository.findById(anyString())).thenReturn(Optional.of(game));
 
         SowingResult result = new SowingResult(emptyList(), new Pit(PitType.REGULAR, 7, 7));
-        when(seedsSower.sow(GAME, BoardSide.SOUTH.getFirstPitIndex())).thenReturn(result);
+        when(seedsSower.sow(game, BoardSide.SOUTH.getFirstPitIndex())).thenReturn(result);
 
         gameService.makeMove(GAME_ID, BoardSide.SOUTH.getFirstPitIndex());
 
@@ -153,7 +153,6 @@ class GameServiceTest {
 
         Game persistedGame = gameArgumentCaptor.getValue();
 
-        assertThat(persistedGame.getCurrentPlayer()).isNotEqualTo(GAME.getCurrentPlayer());
-        assertThat(persistedGame.getCurrentPlayer()).isEqualTo(GAME.getPlayers().get(1));
+        assertThat(persistedGame.getCurrentPlayer()).isEqualTo(game.getPlayers().get(1));
     }
 }

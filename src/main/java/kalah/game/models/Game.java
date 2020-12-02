@@ -33,4 +33,14 @@ public class Game implements Serializable {
     public boolean isCurrentPlayerOpponentsKalah(int kalahIndex) {
         return this.currentPlayer.isOpponentPlayersKalah(kalahIndex);
     }
+
+    public Player getNextPlayer() {
+        int currentPlayerIndex = players.indexOf(currentPlayer);
+
+        return players.get(1 >> currentPlayerIndex);
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
 }

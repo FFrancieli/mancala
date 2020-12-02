@@ -33,8 +33,9 @@ public class GameService {
                 .orElseThrow(() -> new GameNotFoundException(String.format(GAME_NOT_FOUND_ERROR, gameId)));
 
         SowingResult result = seedsSower.sow(game, pitIndex);
+
         if (!result.getLastUpdatedPit().isKalah()) {
-//            return gameRepository.save(game.replace(game.getSecondPlayer()));
+            game.setCurrentPlayer(game.getNextPlayer());
         }
 
         return gameRepository.save(game);

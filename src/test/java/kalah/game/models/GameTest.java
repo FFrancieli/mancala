@@ -100,4 +100,23 @@ class GameTest {
 
         assertThat(currentPlayer).isEqualTo(game.getPlayers().get(0));
     }
+
+    @Test
+    void secondPlayerIsSelectedAsNextPlayerWhenFirstPlayerIsCurrentPlayer() {
+        Game game = new Game(FIRST_PLAYER_NAME, SECOND_PLAYER_NAME, SEEDS_ON_PIT);
+
+        Player nextPlayer = game.getNextPlayer();
+
+        assertThat(nextPlayer).isEqualTo(game.getPlayers().get(1));
+    }
+
+    @Test
+    void firstPlayerIsSelectedAsNextPlayerWhenSecondPlayerIsCurrentPlayer() {
+        Game game = new Game(FIRST_PLAYER_NAME, SECOND_PLAYER_NAME, SEEDS_ON_PIT);
+        game.setCurrentPlayer(game.getPlayers().get(1));
+
+        Player nextPlayer = game.getNextPlayer();
+
+        assertThat(nextPlayer).isEqualTo(game.getPlayers().get(0));
+    }
 }
