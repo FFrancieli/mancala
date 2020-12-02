@@ -7,11 +7,13 @@
       </div>
       <PitRow :pits="northSideOrientationPits"
               :assigned-to-player="playerAssignedToNorthSideOfTheBoard"
-              :current-player="currentPlayer"/>
+              :current-player="currentPlayer"
+              @pit-clicked="handlePitClickedEvent($event)"/>
 
       <PitRow :pits="southSideOrientationPits"
               :assigned-to-player="playerAssignedToSouthSideOfTheBoard"
-              :current-player="currentPlayer"/>
+              :current-player="currentPlayer"
+              @pit-clicked="handlePitClickedEvent($event)"/>
     </div>
     <Kalah :amount-of-seeds="southOrientationKalah"></Kalah>
     <div class="player-bottom player-name">
@@ -38,9 +40,17 @@ export default {
     }
   },
   components: {Kalah, PitRow},
+  methods: {
+    handlePitClickedEvent(eventData) {
+      this.$emit('pit-clicked', eventData);
+    },
+  },
   computed: {
     northSideOrientationPits() {
-      return this.pits.filter(pit => pit.index > 6 && pit.index !== 13);
+      const pitsOnNorth = this.pits.filter(pit => pit.index > 6 && pit.index !== 13);
+      return pitsOnNorth.sort(function (a, b) {
+        return b.index - a.index;
+      });
     },
     northOrientationKalah() {
       return this.pits.filter(pit => pit.index === 13)[0].totalSeeds;

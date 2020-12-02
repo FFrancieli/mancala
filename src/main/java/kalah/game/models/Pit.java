@@ -1,15 +1,17 @@
 package kalah.game.models;
 
 import kalah.game.models.board.BoardSide;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+@NoArgsConstructor
 public class Pit implements Serializable {
     private static final int EMPTY_PIT = 0;
-    private final PitType pitType;
-    private final int index;
+    private PitType pitType;
+    private int index;
     private int amountOfSeeds;
 
     public Pit(PitType pitType, int index) {
