@@ -34,7 +34,7 @@ public class GameService {
 
         SowingResult result = seedsSower.sow(game, pitIndex);
         if (!result.getLastUpdatedPit().isKalah()) {
-            return gameRepository.save(game.replace(game.getSecondPlayer()));
+//            return gameRepository.save(game.replace(game.getSecondPlayer()));
         }
 
         return gameRepository.save(game);

@@ -1,12 +1,8 @@
 package kalah.game.models;
 
-import com.google.common.annotations.VisibleForTesting;
 import kalah.game.models.board.BoardSide;
 import kalah.game.models.board.PitsInitializer;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
@@ -17,40 +13,24 @@ import java.util.List;
 @RedisHash("Game")
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class Game implements Serializable {
 
     @Id
     private String id;
-    private Player firstPlayer;
-    private Player secondPlayer;
     private Player currentPlayer;
     private List<Pit> pits;
+    private List<Player> players;
 
     public Game(String firstPlayerName, String secondPlayerName, int amountOfSeedsOnPit) {
-        this.firstPlayer = new Player(firstPlayerName, BoardSide.SOUTH);
-        this.secondPlayer = new Player(secondPlayerName, BoardSide.NORTH);
+        Player firstPlayer = new Player(firstPlayerName, BoardSide.SOUTH);
+        Player secondPlayer = new Player(secondPlayerName, BoardSide.NORTH);
         this.currentPlayer = firstPlayer;
         this.pits = PitsInitializer.initializePits(amountOfSeedsOnPit);
-    }
-
-    @VisibleForTesting
-    public Game(String firstPlayerName, String secondPlayerName, List<Pit> pits) {
-        this.firstPlayer = new Player(firstPlayerName, BoardSide.SOUTH);
-        this.secondPlayer = new Player(secondPlayerName, BoardSide.NORTH);
-        this.currentPlayer = firstPlayer;
-        this.pits = pits;
-    }
-
-    public Game replace(Player currentPlayer) {
-        return new Game(this.id, this.firstPlayer, this.secondPlayer, currentPlayer, this.pits);
+        this.players = List.of(firstPlayer, secondPlayer);
     }
 
     public boolean isCurrentPlayerOpponentsKalah(int kalahIndex) {
         return this.currentPlayer.isOpponentPlayersKalah(kalahIndex);
-    }
-
-    @VisibleForTesting
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
     }
 }

@@ -39,8 +39,9 @@ public class GamePayload {
     }
 
     private static List<PlayerPayload> convertPlayersToPayload(Game game) {
-        return List.of(PlayerPayload.fromEntity(game.getFirstPlayer()),
-                PlayerPayload.fromEntity(game.getSecondPlayer()));
+        return List.of(
+                PlayerPayload.fromEntity(game.getPlayers().get(0)),
+                PlayerPayload.fromEntity(game.getPlayers().get(1)));
     }
 
     private static List<PitPayload> convertPitsToPayload(Game game) {

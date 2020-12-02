@@ -61,7 +61,7 @@ class GameTest {
     void createsFirstPlayerAssignedToSouthSideOfBoardOnGameInstantiation() {
         Game game = new Game(FIRST_PLAYER_NAME, SECOND_PLAYER_NAME, SEEDS_ON_PIT);
 
-        Player firstPlayer = game.getFirstPlayer();
+        Player firstPlayer = game.getPlayers().get(0);
 
         assertThat(firstPlayer).isNotNull();
         assertThat(firstPlayer.getName()).isEqualTo(FIRST_PLAYER_NAME);
@@ -72,7 +72,7 @@ class GameTest {
     void createsSecondPlayerAssignedToNorthSideOfBoardOnGameInstantiation() {
         Game game = new Game(FIRST_PLAYER_NAME, SECOND_PLAYER_NAME, SEEDS_ON_PIT);
 
-        Player secondPlayer = game.getSecondPlayer();
+        Player secondPlayer = game.getPlayers().get(1);
 
         assertThat(secondPlayer).isNotNull();
         assertThat(secondPlayer.getName()).isEqualTo(SECOND_PLAYER_NAME);
@@ -98,15 +98,6 @@ class GameTest {
 
         Player currentPlayer = game.getCurrentPlayer();
 
-        assertThat(currentPlayer).isEqualTo(game.getFirstPlayer());
-    }
-
-    @Test
-    void replaceCurrentUser() {
-        Game game = new Game(FIRST_PLAYER_NAME, SECOND_PLAYER_NAME, SEEDS_ON_PIT);
-
-        Game gameWithNewCurrentPlayer = game.replace(game.getSecondPlayer());
-
-        assertThat(gameWithNewCurrentPlayer.getCurrentPlayer()).isEqualTo(game.getSecondPlayer());
+        assertThat(currentPlayer).isEqualTo(game.getPlayers().get(0));
     }
 }

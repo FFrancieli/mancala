@@ -20,6 +20,7 @@ class SeedsSowerTest {
     private static final int AMOUNT_OF_SEEDS = 6;
     private static final String PLAYER_SOUTH_OF_BOARD = "first_player";
     private static final String PLAYER_NORTH_OF_BOARD = "secondPlayer";
+    public static final Player PLAYER_SOUTH = new Player(PLAYER_SOUTH_OF_BOARD, BoardSide.SOUTH);
     private static final Player PLAYER_NORTH = new Player(PLAYER_NORTH_OF_BOARD, NORTH);
     private static final int FIRST_PIT_ON_SOUTH_INDEX = 0;
 
@@ -69,7 +70,8 @@ class SeedsSowerTest {
     void skipsOpponentPlayersKalah() {
         pits.get(5).setAmountOfSeeds(10);
         pits.get(2).setAmountOfSeeds(1);
-        Game game = new Game(PLAYER_SOUTH_OF_BOARD, PLAYER_NORTH_OF_BOARD, pits);
+
+        Game game = Game.builder().currentPlayer(PLAYER_SOUTH).pits(pits).build();
 
         SowingResult sowedResult = seedsSower.sow(game, 5);
 
@@ -86,7 +88,9 @@ class SeedsSowerTest {
 
     @Test
     void sowingPitOnIndexSevenForPlayerOnNorthEndsOnKalah() {
-        game.setCurrentPlayer(PLAYER_NORTH);
+        Game game = Game.builder()
+                .currentPlayer(PLAYER_NORTH)
+                .pits(pits).build();
 
         SowingResult sowedResult = seedsSower.sow(game, NORTH.getFirstPitIndex());
 
@@ -98,7 +102,9 @@ class SeedsSowerTest {
 
     @Test
     void pitOnIndexSevenHasZeroSeedsAfterSowing() {
-        game.setCurrentPlayer(PLAYER_NORTH);
+        Game game = Game.builder()
+                .currentPlayer(PLAYER_NORTH)
+                .pits(pits).build();
 
         SowingResult sowedResult = seedsSower.sow(game, NORTH.getFirstPitIndex());
 
@@ -109,7 +115,9 @@ class SeedsSowerTest {
 
     @Test
     void sowingPitOnIndexSevenForPlayerOnNorthDoesNotAffectSouthRowOnBoard() {
-        game.setCurrentPlayer(PLAYER_NORTH);
+        Game game = Game.builder()
+                .currentPlayer(PLAYER_NORTH)
+                .pits(pits).build();
 
         SowingResult sowedResult = seedsSower.sow(game, NORTH.getFirstPitIndex());
 
@@ -125,8 +133,9 @@ class SeedsSowerTest {
         pits.get(12).setAmountOfSeeds(10);
         pits.get(9).setAmountOfSeeds(1);
 
-        Game game = new Game(PLAYER_SOUTH_OF_BOARD, PLAYER_NORTH_OF_BOARD, pits);
-        game.setCurrentPlayer(PLAYER_NORTH);
+        Game game = Game.builder()
+                .currentPlayer(PLAYER_NORTH)
+                .pits(pits).build();
 
         SowingResult sowedResult = seedsSower.sow(game, 12);
 
@@ -146,7 +155,9 @@ class SeedsSowerTest {
         pits.get(SOUTH.getKalahIndex() - 1).setAmountOfSeeds(8);
         pits.get(SOUTH.getFirstPitIndex()).setAmountOfSeeds(0);
 
-        Game game = new Game(PLAYER_SOUTH_OF_BOARD, PLAYER_NORTH_OF_BOARD, pits);
+        Game game = Game.builder()
+                .currentPlayer(PLAYER_SOUTH)
+                .pits(pits).build();
 
         SowingResult sowedResult = seedsSower.sow(game, 5);
 
