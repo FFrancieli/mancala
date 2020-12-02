@@ -44,8 +44,7 @@ public class GamePayload {
     }
 
     private static List<PitPayload> convertPitsToPayload(Game game) {
-        return game.getBoard()
-                .getPits()
+        return game.getPits()
                 .stream()
                 .map(PitPayload::fromEntity)
                 .collect(Collectors.toList());

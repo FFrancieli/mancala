@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BoarPitsInitializer {
+public class PitsInitializer {
 
     private static final int MAXIMUM_OF_PITS_PER_SIDE_OF_BOARD = 7;
 

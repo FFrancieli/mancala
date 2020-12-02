@@ -50,7 +50,7 @@ class GameServiceTest {
         assertThat(gameToBePersisted.getFirstPlayer().getName()).isEqualTo(FIRST_PLAYER_NAME);
         assertThat(gameToBePersisted.getSecondPlayer().getName()).isEqualTo(SECOND_PLAYER_NAME);
 
-        Pit firstPitInTheBoard = gameToBePersisted.getBoard().getPits().get(0);
+        Pit firstPitInTheBoard = gameToBePersisted.getPits().get(0);
         assertThat(firstPitInTheBoard.getAmountOfSeeds()).isEqualTo(SEEDS_PER_PIT);
     }
 

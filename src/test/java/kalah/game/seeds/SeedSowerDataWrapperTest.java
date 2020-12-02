@@ -2,7 +2,7 @@ package kalah.game.seeds;
 
 import kalah.game.models.Pit;
 import kalah.game.models.Player;
-import kalah.game.models.board.BoarPitsInitializer;
+import kalah.game.models.board.PitsInitializer;
 import kalah.game.models.board.BoardSide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class SeedSowerDataWrapperTest {
     public static final int AMOUNT_OF_SEEDS = 6;
     public static final int INDEX_OF_REGULAR_PIT = 11;
 
-    private static final List<Pit> PITS = BoarPitsInitializer.initializePits(AMOUNT_OF_SEEDS);
+    private static final List<Pit> PITS = PitsInitializer.initializePits(AMOUNT_OF_SEEDS);
     Player player = new Player(PLAYER_NAME, BoardSide.NORTH);
 
     @BeforeEach

@@ -11,13 +11,13 @@ import static kalah.game.models.board.BoardSide.NORTH;
 import static kalah.game.models.board.BoardSide.SOUTH;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BoarPitsInitializerTest {
+class PitsInitializerTest {
 
     private static final int NUMBER_OF_SEEDS_PER_PIT = 6;
 
     @Test
     void hasSixPitsForSouthSideOfTheBoard() {
-        List<Pit> pits = BoarPitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
+        List<Pit> pits = PitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
         assertThat(pits).hasSize(14);
 
         IntStream.range(SOUTH.getFirstPitIndex(), SOUTH.getKalahIndex())
@@ -31,7 +31,7 @@ class BoarPitsInitializerTest {
 
     @Test
     void hasOneKalahOnSouthSideOfTheBoard() {
-        List<Pit> pits = BoarPitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
+        List<Pit> pits = PitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
 
         Pit kalah = pits.get(SOUTH.getKalahIndex());
 
@@ -43,7 +43,7 @@ class BoarPitsInitializerTest {
 
     @Test
     void hasSixPitsForNorthSideOfTheBoard() {
-        List<Pit> pits = BoarPitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
+        List<Pit> pits = PitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
         assertThat(pits).hasSize(14);
 
         IntStream.range(NORTH.getFirstPitIndex(), NORTH.getKalahIndex())
@@ -57,7 +57,7 @@ class BoarPitsInitializerTest {
 
     @Test
     void hasOneKalahOnNorthSideOfTheBoard() {
-        List<Pit> pits = BoarPitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
+        List<Pit> pits = PitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
 
         Pit kalah = pits.get(NORTH.getKalahIndex());
 

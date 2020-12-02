@@ -2,7 +2,7 @@ package kalah.game.seeds;
 
 import kalah.game.models.Pit;
 import kalah.game.models.Player;
-import kalah.game.models.board.BoarPitsInitializer;
+import kalah.game.models.board.PitsInitializer;
 import kalah.game.models.board.BoardSide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class SeedsSowerTest {
     void setUp() {
         seedsSower = new SeedsSower();
 
-        pits = BoarPitsInitializer.initializePits(AMOUNT_OF_SEEDS);
+        pits = PitsInitializer.initializePits(AMOUNT_OF_SEEDS);
     }
 
     @Test
