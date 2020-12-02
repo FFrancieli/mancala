@@ -2,6 +2,11 @@ package kalah.game.models;
 
 import kalah.game.models.board.BoardSide;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,5 +68,59 @@ class PlayerTest {
         Player anotherPlayer = new Player(ANOTHER_PLAYER_NAME, BoardSide.SOUTH);
 
         assertThat(anotherPlayer.hashCode()).isNotEqualTo(PLAYER.hashCode());
+    }
+
+    @ParameterizedTest
+    @MethodSource("pitsAssignedToPlayer")
+    void pitIsAssignedToPlayerWhenIndexIsWithinPlayersBoardSide(BoardSide boardSide, Pit pit) {
+        Player player = new Player(PLAYER_NAME, boardSide);
+
+        assertThat(player.isAssignedTo(pit)).isTrue();
+    }
+
+    private static Stream<Arguments> pitsAssignedToPlayer() {
+        return Stream.of(
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 0)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 1)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 2)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 3)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 4)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 5)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.KALAH, 6)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 7)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 8)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 9)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 10)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 11)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 12)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.KALAH, 13))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("pitsNotAssignedToPlayer")
+    void pitIsNotAssignedToPlayerWhenIndexIsOutOfPlayersBoardSideRange(BoardSide boardSide, Pit pit) {
+        Player player = new Player(PLAYER_NAME, boardSide);
+
+        assertThat(player.isAssignedTo(pit)).isFalse();
+    }
+
+    private static Stream<Arguments> pitsNotAssignedToPlayer() {
+        return Stream.of(
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 0)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 1)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 2)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 3)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 4)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.REGULAR, 5)),
+                Arguments.of(BoardSide.NORTH, new Pit(PitType.KALAH, 6)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 7)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 8)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 9)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 10)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 11)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 12)),
+                Arguments.of(BoardSide.SOUTH, new Pit(PitType.KALAH, 13))
+        );
     }
 }

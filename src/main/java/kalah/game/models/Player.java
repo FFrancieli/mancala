@@ -36,4 +36,8 @@ public class Player implements Serializable {
 
         return 31 * nameHashCode + boardSideHashCode;
     }
+
+    public boolean isAssignedTo(Pit pit) {
+        return pit.getIndex() >= boardSide.getFirstPitIndex() &&  boardSide.getKalahIndex() >= pit.getIndex();
+    }
 }

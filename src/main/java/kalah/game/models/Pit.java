@@ -1,5 +1,7 @@
 package kalah.game.models;
 
+import kalah.game.models.board.BoardSide;
+
 import java.io.Serializable;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -25,6 +27,10 @@ public class Pit implements Serializable {
         this.amountOfSeeds = amountOfSeeds;
     }
 
+    public static Pit newInstance(Pit pit) {
+        return new Pit(pit.pitType, pit.index, pit.amountOfSeeds);
+    }
+
     private String invalidInitialAmountOfSeedsOnKalahMessageWrapper(int amountOfSeeds) {
         return String.format("Kalah must be initialized with zero seeds. Received %d seeds on constructor", amountOfSeeds);
     }
@@ -43,5 +49,37 @@ public class Pit implements Serializable {
 
     public int getIndex() {
         return index;
+    }
+
+    public void sow() {
+        this.amountOfSeeds += 1;
+    }
+
+    public void removeAllSeeds() {
+        this.amountOfSeeds = 0;
+    }
+
+    public void setAmountOfSeeds(int amountOfSeeds) {
+        this.amountOfSeeds = amountOfSeeds;
+    }
+
+    public int findOppositePitIndex() {
+        if (this.pitType.isKalah()) {
+            return BoardSide.getSideByKalahIndex(this.index).getOpositeSideKalahIndex();
+        }
+
+        return this.index + (2 * calculateDistanceToKalahOnSouth());
+    }
+
+    private int calculateDistanceToKalahOnSouth() {
+        return BoardSide.SOUTH.getKalahIndex() - this.index;
+    }
+
+    public void addSeeds(int extraSeeds) {
+        this.amountOfSeeds += extraSeeds;
+    }
+
+    public boolean hasSeeds() {
+        return amountOfSeeds > 0;
     }
 }
