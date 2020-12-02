@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PlayerTest {
+    private static final int INDEX_OF_REGULAR_PIT = 11;
 
     private static final String PLAYER_NAME = "player";
     private static final String ANOTHER_PLAYER_NAME = "anotherPlayer";
@@ -122,5 +123,26 @@ class PlayerTest {
                 Arguments.of(BoardSide.SOUTH, new Pit(PitType.REGULAR, 12)),
                 Arguments.of(BoardSide.SOUTH, new Pit(PitType.KALAH, 13))
         );
+    }
+
+    @Test
+    void returnsFalseWhenGivenIndexRefersToCurrentPlayersKalah() {
+        Player player = new Player(PLAYER_NAME, BoardSide.NORTH);
+
+        assertThat(player.isOpponentPlayersKalah(BoardSide.NORTH.getKalahIndex())).isFalse();
+    }
+
+    @Test
+    void returnsFalseWhenGivenIndexDoesNotReferToKalah() {
+        Player player = new Player(PLAYER_NAME, BoardSide.NORTH);
+
+        assertThat(player.isOpponentPlayersKalah(INDEX_OF_REGULAR_PIT)).isFalse();
+    }
+
+    @Test
+    void returnsTrueWhenGivenIndexRefersToOpponentssKalah() {
+        Player player = new Player(PLAYER_NAME, BoardSide.NORTH);
+
+        assertThat(player.isOpponentPlayersKalah(BoardSide.SOUTH.getKalahIndex())).isTrue();
     }
 }

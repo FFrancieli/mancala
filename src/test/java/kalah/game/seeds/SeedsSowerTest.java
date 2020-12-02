@@ -1,9 +1,10 @@
 package kalah.game.seeds;
 
+import kalah.game.models.Game;
 import kalah.game.models.Pit;
 import kalah.game.models.Player;
-import kalah.game.models.board.PitsInitializer;
 import kalah.game.models.board.BoardSide;
+import kalah.game.models.board.PitsInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,26 +18,27 @@ import static kalah.game.models.board.BoardSide.SOUTH;
 class SeedsSowerTest {
 
     private static final int AMOUNT_OF_SEEDS = 6;
-    public static final Player PLAYER_SOUTH = new Player("player", BoardSide.SOUTH);
-    public static final Player PLAYER_NORTH = new Player("player", NORTH);
+    private static final String PLAYER_SOUTH_OF_BOARD = "first_player";
+    private static final String PLAYER_NORTH_OF_BOARD = "secondPlayer";
+    private static final Player PLAYER_NORTH = new Player(PLAYER_NORTH_OF_BOARD, NORTH);
+    private static final int FIRST_PIT_ON_SOUTH_INDEX = 0;
 
     private List<Pit> pits;
+    private Game game;
 
     private SeedsSower seedsSower;
-
 
     @BeforeEach
     void setUp() {
         seedsSower = new SeedsSower();
 
         pits = PitsInitializer.initializePits(AMOUNT_OF_SEEDS);
+        game = new Game(PLAYER_SOUTH_OF_BOARD, PLAYER_NORTH_OF_BOARD, AMOUNT_OF_SEEDS);
     }
 
     @Test
     void sowingPitOnIndexZeroForPlayerOnSouthEndsOnKalah() {
-        SeedSowerDataWrapper seedSowerDataWrapper = new SeedSowerDataWrapper(PLAYER_SOUTH, pits, pits.get(0));
-
-        SowingResult sowedResult = seedsSower.sow(seedSowerDataWrapper);
+        SowingResult sowedResult = seedsSower.sow(game, FIRST_PIT_ON_SOUTH_INDEX);
 
         assertThat(sowedResult.getLastUpdatedPit()).isKalah()
                 .indexIs(BoardSide.SOUTH.getKalahIndex())
@@ -45,9 +47,7 @@ class SeedsSowerTest {
 
     @Test
     void pitOnIndexZeroSeedsAfterSowing() {
-        SeedSowerDataWrapper seedSowerDataWrapper = new SeedSowerDataWrapper(PLAYER_SOUTH, pits, pits.get(0));
-
-        SowingResult sowedResult = seedsSower.sow(seedSowerDataWrapper);
+        SowingResult sowedResult = seedsSower.sow(game, FIRST_PIT_ON_SOUTH_INDEX);
 
         Pit pitSowedFrom = sowedResult.getUpdatedPits().get(0);
 
@@ -56,9 +56,7 @@ class SeedsSowerTest {
 
     @Test
     void sowingPitOnIndexZeroForPlayerOnSouthDoesNotAffectNorthRowOnBoard() {
-        SeedSowerDataWrapper seedSowerDataWrapper = new SeedSowerDataWrapper(PLAYER_SOUTH, pits, pits.get(0));
-
-        SowingResult sowedResult = seedsSower.sow(seedSowerDataWrapper);
+        SowingResult sowedResult = seedsSower.sow(game, FIRST_PIT_ON_SOUTH_INDEX);
 
         assertThat(sowedResult.getLastUpdatedPit())
                 .isKalah()
@@ -71,9 +69,9 @@ class SeedsSowerTest {
     void skipsOpponentPlayersKalah() {
         pits.get(5).setAmountOfSeeds(10);
         pits.get(2).setAmountOfSeeds(1);
+        Game game = new Game(PLAYER_SOUTH_OF_BOARD, PLAYER_NORTH_OF_BOARD, pits);
 
-        SeedSowerDataWrapper seedSowerDataWrapper = new SeedSowerDataWrapper(PLAYER_SOUTH, pits, pits.get(5));
-        SowingResult sowedResult = seedsSower.sow(seedSowerDataWrapper);
+        SowingResult sowedResult = seedsSower.sow(game, 5);
 
         Pit opponentsKalah = pits.get(NORTH.getKalahIndex());
         assertThat(opponentsKalah).hasZeroSeeds();
@@ -88,9 +86,9 @@ class SeedsSowerTest {
 
     @Test
     void sowingPitOnIndexSevenForPlayerOnNorthEndsOnKalah() {
-        SeedSowerDataWrapper seedSowerDataWrapper = new SeedSowerDataWrapper(PLAYER_NORTH, pits, pits.get(NORTH.getFirstPitIndex()));
+        game.setCurrentPlayer(PLAYER_NORTH);
 
-        SowingResult sowedResult = seedsSower.sow(seedSowerDataWrapper);
+        SowingResult sowedResult = seedsSower.sow(game, NORTH.getFirstPitIndex());
 
         assertThat(sowedResult.getLastUpdatedPit())
                 .isKalah()
@@ -100,9 +98,9 @@ class SeedsSowerTest {
 
     @Test
     void pitOnIndexSevenHasZeroSeedsAfterSowing() {
-        SeedSowerDataWrapper seedSowerDataWrapper = new SeedSowerDataWrapper(PLAYER_SOUTH, pits, pits.get(NORTH.getFirstPitIndex()));
+        game.setCurrentPlayer(PLAYER_NORTH);
 
-        SowingResult sowedResult = seedsSower.sow(seedSowerDataWrapper);
+        SowingResult sowedResult = seedsSower.sow(game, NORTH.getFirstPitIndex());
 
         Pit pitSowedFrom = sowedResult.getUpdatedPits().get(NORTH.getFirstPitIndex());
 
@@ -111,9 +109,9 @@ class SeedsSowerTest {
 
     @Test
     void sowingPitOnIndexSevenForPlayerOnNorthDoesNotAffectSouthRowOnBoard() {
-        SeedSowerDataWrapper seedSowerDataWrapper = new SeedSowerDataWrapper(PLAYER_NORTH, pits, pits.get(NORTH.getFirstPitIndex()));
+        game.setCurrentPlayer(PLAYER_NORTH);
 
-        SowingResult sowedResult = seedsSower.sow(seedSowerDataWrapper);
+        SowingResult sowedResult = seedsSower.sow(game, NORTH.getFirstPitIndex());
 
         assertThat(sowedResult.getLastUpdatedPit())
                 .isKalah()
@@ -127,8 +125,10 @@ class SeedsSowerTest {
         pits.get(12).setAmountOfSeeds(10);
         pits.get(9).setAmountOfSeeds(1);
 
-        SeedSowerDataWrapper seedSowerDataWrapper = new SeedSowerDataWrapper(PLAYER_NORTH, pits, pits.get(12));
-        SowingResult sowedResult = seedsSower.sow(seedSowerDataWrapper);
+        Game game = new Game(PLAYER_SOUTH_OF_BOARD, PLAYER_NORTH_OF_BOARD, pits);
+        game.setCurrentPlayer(PLAYER_NORTH);
+
+        SowingResult sowedResult = seedsSower.sow(game, 12);
 
         Pit opponentsKalah = pits.get(SOUTH.getKalahIndex());
         assertThat(opponentsKalah).hasZeroSeeds();
@@ -146,8 +146,9 @@ class SeedsSowerTest {
         pits.get(SOUTH.getKalahIndex() - 1).setAmountOfSeeds(8);
         pits.get(SOUTH.getFirstPitIndex()).setAmountOfSeeds(0);
 
-        SeedSowerDataWrapper seedSowerDataWrapper = new SeedSowerDataWrapper(PLAYER_SOUTH, pits, pits.get(5));
-        SowingResult sowedResult = seedsSower.sow(seedSowerDataWrapper);
+        Game game = new Game(PLAYER_SOUTH_OF_BOARD, PLAYER_NORTH_OF_BOARD, pits);
+
+        SowingResult sowedResult = seedsSower.sow(game, 5);
 
         assertThat(sowedResult.getLastUpdatedPit()).indexIs(0).hasZeroSeeds();
 

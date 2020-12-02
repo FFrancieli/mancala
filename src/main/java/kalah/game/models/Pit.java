@@ -82,4 +82,10 @@ public class Pit implements Serializable {
     public boolean hasSeeds() {
         return amountOfSeeds > 0;
     }
+
+    public boolean isAssignedTo(Player player) {
+//        pit.getIndex() >= boardSide.getFirstPitIndex() && boardSide.getKalahIndex() >= pit.getIndex();
+        BoardSide playerBoardSide = player.getBoardSide();
+        return index >= playerBoardSide.getFirstPitIndex() && playerBoardSide.getKalahIndex() >= index;
+    }
 }

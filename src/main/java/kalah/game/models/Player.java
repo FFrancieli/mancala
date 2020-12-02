@@ -38,6 +38,12 @@ public class Player implements Serializable {
     }
 
     public boolean isAssignedTo(Pit pit) {
-        return pit.getIndex() >= boardSide.getFirstPitIndex() &&  boardSide.getKalahIndex() >= pit.getIndex();
+        return pit.getIndex() >= boardSide.getFirstPitIndex() && boardSide.getKalahIndex() >= pit.getIndex();
+    }
+
+    public boolean isOpponentPlayersKalah(int otherKalahIndex) {
+        int opponentsKalahIndex = this.getBoardSide().getOpositeSideKalahIndex();
+
+        return opponentsKalahIndex == otherKalahIndex;
     }
 }

@@ -1,6 +1,8 @@
 package kalah.game.seeds;
 
+import kalah.game.models.Game;
 import kalah.game.models.Pit;
+import kalah.game.models.Player;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -10,28 +12,30 @@ import java.util.List;
 public class SeedsSower {
     public static final int MAXIMUM_PIT_INDEX = 13;
 
-    public SowingResult sow(SeedSowerDataWrapper seedSowerData) {
-        seedSowerData.getPits().sort(Comparator.comparing(Pit::getIndex));
+    public SowingResult sow(Game game, int pitId) {
+        game.getPits().sort(Comparator.comparing(Pit::getIndex));
 
-        List<Pit> pits = seedSowerData.getPits();
-        pits.get(seedSowerData.sowingFromPitIndex()).removeAllSeeds();
+        List<Pit> pits = List.copyOf(game.getPits());
+        Pit sowingFromPit = Pit.newInstance(pits.get(pitId));
 
-        Pit lastUpdatedPit = distributeSeeds(seedSowerData, pits);
+        pits.get(pitId).removeAllSeeds();
 
-        if (canCaptureOppositePlayerSeeds(seedSowerData, lastUpdatedPit)) {
-            captureOppositePlayerSeeds(seedSowerData, pits, lastUpdatedPit);
+        Pit lastUpdatedPit = distributeSeeds(game, sowingFromPit, pits);
+
+        if (canCaptureOppositePlayerSeeds(game.getCurrentPlayer(), lastUpdatedPit)) {
+            captureOppositePlayerSeeds(game.getCurrentPlayer(), pits, lastUpdatedPit);
         }
 
         return new SowingResult(pits, lastUpdatedPit);
     }
 
-    private Pit distributeSeeds(SeedSowerDataWrapper seedSowerData, List<Pit> pits) {
-        int amountOfSeeds = seedSowerData.getAmountOfSeedsToSow();
-        int currentPitIndex = seedSowerData.sowingFromPitIndex() + 1;
+    private Pit distributeSeeds(Game game, Pit sowingFromPit, List<Pit> pits) {
+        int amountOfSeeds = sowingFromPit.getAmountOfSeeds();
+        int currentPitIndex = sowingFromPit.getIndex() + 1;
 
-        Pit lastUpdatedPit = seedSowerData.getSowingFromPit();
+        Pit lastUpdatedPit = sowingFromPit;
         while (amountOfSeeds > 0) {
-            if (!seedSowerData.isOpponentPlayersKalah(currentPitIndex)) {
+            if (!game.isCurrentPlayerOpponentsKalah(currentPitIndex)) {
                 lastUpdatedPit = pits.get(currentPitIndex);
                 lastUpdatedPit.sow();
                 amountOfSeeds -= 1;
@@ -43,13 +47,13 @@ public class SeedsSower {
         return lastUpdatedPit;
     }
 
-    private void captureOppositePlayerSeeds(SeedSowerDataWrapper seedSowerData, List<Pit> pits, Pit lastUpdatedPit) {
+    private void captureOppositePlayerSeeds(Player currentPlayer, List<Pit> pits, Pit lastUpdatedPit) {
         Pit oppositePit = pits.get(lastUpdatedPit.findOppositePitIndex());
 
         if (oppositePit.hasSeeds()) {
             int newAmountOfSeeds = lastUpdatedPit.getAmountOfSeeds() + oppositePit.getAmountOfSeeds();
 
-            pits.get(seedSowerData.getIndexOfCurrentPlayerKalah())
+            pits.get(currentPlayer.getBoardSide().getKalahIndex())
                     .addSeeds(newAmountOfSeeds);
 
             lastUpdatedPit.removeAllSeeds();
@@ -57,15 +61,11 @@ public class SeedsSower {
         }
     }
 
-    private boolean canCaptureOppositePlayerSeeds(SeedSowerDataWrapper seedSowerData, Pit lastUpdatedPit) {
-        return isPitAssignedToPlayer(seedSowerData, lastUpdatedPit) && endedOnEmptyPit(lastUpdatedPit);
+    private boolean canCaptureOppositePlayerSeeds(Player currentPlayer, Pit lastUpdatedPit) {
+        return lastUpdatedPit.isAssignedTo(currentPlayer) && lastSeedLandedOnEmptyPit(lastUpdatedPit);
     }
 
-    private boolean isPitAssignedToPlayer(SeedSowerDataWrapper seedSowerData, Pit lastUpdatedPit) {
-        return seedSowerData.getCurrentPlayer().isAssignedTo(lastUpdatedPit);
-    }
-
-    private boolean endedOnEmptyPit(Pit lastUpdatedPit) {
+    private boolean lastSeedLandedOnEmptyPit(Pit lastUpdatedPit) {
         return lastUpdatedPit.getAmountOfSeeds() == 1;
     }
 
