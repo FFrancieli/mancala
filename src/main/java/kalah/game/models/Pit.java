@@ -85,6 +85,10 @@ public class Pit implements Serializable {
         return amountOfSeeds > 0;
     }
 
+    public boolean isEmpty() {
+        return amountOfSeeds == 0;
+    }
+
     public boolean isAssignedTo(Player player) {
         BoardSide playerBoardSide = player.getBoardSide();
 

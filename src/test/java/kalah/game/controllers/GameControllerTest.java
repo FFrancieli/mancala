@@ -1,5 +1,6 @@
 package kalah.game.controllers;
 
+import kalah.game.errorHandling.exceptions.InvalidMoveException;
 import kalah.game.models.CreateNewGamePayload;
 import kalah.game.models.Game;
 import kalah.game.models.board.BoardSide;
@@ -10,6 +11,8 @@ import kalah.game.service.GameService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -18,6 +21,7 @@ import java.util.UUID;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
@@ -31,6 +35,7 @@ class GameControllerTest {
     public static final int SEEDS_PER_PIT = 6;
     public static final String GAME_ID = UUID.randomUUID().toString();
     public static final int PIT_INDEX = 1;
+    public static final int INVALID_PIT_INDEX = 15;
     @Mock
     private GameService gameService;
 
@@ -107,6 +112,19 @@ class GameControllerTest {
 
         assertPitsAreCorrectlySetOnSideOfBoard(response.getPits(), BoardSide.SOUTH);
         assertPitsAreCorrectlySetOnSideOfBoard(response.getPits(), BoardSide.NORTH);
+    }
+
+    @Test
+    void throwsInvalidMoveExceptionWhenPitIndexIsInvalid() {
+        assertThatThrownBy(() -> controller.sow(GAME_ID, INVALID_PIT_INDEX))
+            .isExactlyInstanceOf(InvalidMoveException.class);
+    }
+
+    @ParameterizedTest
+    @EnumSource(BoardSide.class)
+    void throwsInvalidMoveExceptionWhenSowingFromKalah(BoardSide boardSide) {
+        assertThatThrownBy(() -> controller.sow(GAME_ID, boardSide.getKalahIndex()))
+                .isExactlyInstanceOf(InvalidMoveException.class);
     }
 
     private void assertPitsAreCorrectlySetOnSideOfBoard(List<PitPayload> pits, BoardSide boardSide) {

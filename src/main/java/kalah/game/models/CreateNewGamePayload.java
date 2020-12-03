@@ -6,12 +6,13 @@ import lombok.Getter;
 
 @Getter
 public class CreateNewGamePayload {
+
     private final String firstPlayerName;
     private final String secondPlayerName;
 
     @JsonCreator
-    public CreateNewGamePayload(@JsonProperty("firstPlayerName") String firstPlayerName,
-                                @JsonProperty("secondPlayerName") String secondPlayerName) {
+    public CreateNewGamePayload(@JsonProperty(value = "firstPlayerName", required = true) String firstPlayerName,
+                                @JsonProperty(value = "secondPlayerName", required = true) String secondPlayerName) {
         this.firstPlayerName = firstPlayerName;
         this.secondPlayerName = secondPlayerName;
     }

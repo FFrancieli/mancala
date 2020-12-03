@@ -190,4 +190,18 @@ class PitTest {
 
         assertThat(pit.isKalah()).isFalse();
     }
+
+    @Test
+    void isEmptyWhenAmountOfSeedsIsZero() {
+        Pit pit = new Pit(PitType.REGULAR, 0);
+
+        assertThat(pit.isEmpty()).isTrue();
+    }
+
+    @Test
+    void isNotEmptyWhenAmountOfSeedsIsZero() {
+        Pit pit = new Pit(PitType.REGULAR, 0, AMOUNT_OF_SEEDS);
+
+        assertThat(pit.isEmpty()).isFalse();
+    }
 }

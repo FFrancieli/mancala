@@ -25,9 +25,10 @@ public class Game implements Serializable {
     public Game(String firstPlayerName, String secondPlayerName, int amountOfSeedsOnPit) {
         Player firstPlayer = new Player(firstPlayerName, BoardSide.SOUTH);
         Player secondPlayer = new Player(secondPlayerName, BoardSide.NORTH);
+        this.players = List.of(firstPlayer, secondPlayer);
+
         this.currentPlayer = firstPlayer;
         this.pits = PitsInitializer.initializePits(amountOfSeedsOnPit);
-        this.players = List.of(firstPlayer, secondPlayer);
     }
 
     public boolean isCurrentPlayerOpponentsKalah(int kalahIndex) {

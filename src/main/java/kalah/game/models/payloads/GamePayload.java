@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kalah.game.models.Game;
 import lombok.Getter;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@ResponseBody
 public class GamePayload {
     private final String id;
     private final String currentPlayer;

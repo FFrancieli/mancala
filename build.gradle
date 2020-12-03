@@ -35,6 +35,8 @@ dependencies {
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     testCompile group: 'com.github.kstyrc', name: 'embedded-redis', version: '0.6'
+
+    testCompile group: 'io.rest-assured', name: 'rest-assured', version: '4.3.2'
 }
 
 sourceSets {

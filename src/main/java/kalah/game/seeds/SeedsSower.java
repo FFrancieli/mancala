@@ -5,7 +5,6 @@ import kalah.game.models.Pit;
 import kalah.game.models.Player;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -13,8 +12,6 @@ public class SeedsSower {
     public static final int MAXIMUM_PIT_INDEX = 13;
 
     public SowingResult sow(Game game, int pitId) {
-        game.getPits().sort(Comparator.comparing(Pit::getIndex));
-
         List<Pit> pits = List.copyOf(game.getPits());
         Pit sowingFromPit = Pit.newInstance(pits.get(pitId));
 
