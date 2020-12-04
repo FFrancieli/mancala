@@ -32,4 +32,11 @@ public enum BoardSide {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(String.format("There is no Kalah on board with index %d", indexOfKalah)));
     }
+
+    public static BoardSide getByPitIndex(int index) {
+        if (index > NORTH.kalahIndex) {
+            throw new IllegalArgumentException(String.format("Invalid pit index: %d", index));
+        }
+        return index <= 6 ? SOUTH : NORTH;
+    }
 }

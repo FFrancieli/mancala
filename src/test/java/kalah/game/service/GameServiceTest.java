@@ -5,11 +5,10 @@ import kalah.game.errorHandling.exceptions.InvalidMoveException;
 import kalah.game.models.CreateNewGamePayload;
 import kalah.game.models.Game;
 import kalah.game.models.Pit;
-import kalah.game.models.PitType;
-import kalah.game.models.board.BoardSide;
 import kalah.game.repository.GameRepository;
-import kalah.game.seeds.SeedsSower;
-import kalah.game.seeds.SowingResult;
+import kalah.game.state.GameState;
+import kalah.game.state.action.GameAction;
+import kalah.game.state.action.SowSeedsAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,13 +20,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class GameServiceTest {
@@ -48,15 +45,12 @@ class GameServiceTest {
     @Mock
     private GameRepository gameRepository;
 
-    @Mock
-    private SeedsSower seedsSower;
-
-
     private GameService gameService;
 
     @BeforeEach
     void setUp() {
-        gameService = new GameService(gameRepository, seedsSower);
+        gameService = new GameService(gameRepository);
+
         game = new Game(FIRST_PLAYER_NAME, SECOND_PLAYER_NAME, SEEDS_PER_PIT);
     }
 
@@ -90,7 +84,6 @@ class GameServiceTest {
 
     @Test
     void retrievesGameFromStorageBeforeMakingMove() {
-        when(seedsSower.sow(game, PIT_INDEX)).thenCallRealMethod();
         when(gameRepository.findById(GAME_ID)).thenReturn(Optional.of(game));
 
         gameService.makeMove(GAME_ID, PIT_INDEX);
@@ -108,18 +101,57 @@ class GameServiceTest {
     }
 
     @Test
-    void sowsSeedsFromGivenPit() {
-        when(seedsSower.sow(game, PIT_INDEX)).thenCallRealMethod();
+    void performsGameActionOnMakeMove() {
+        GameState mockedState = mock(GameState.class);
+        game.setGameState(mockedState);
+
         when(gameRepository.findById(GAME_ID)).thenReturn(Optional.of(game));
 
         gameService.makeMove(GAME_ID, PIT_INDEX);
 
-        verify(seedsSower).sow(game, PIT_INDEX);
+        verify(mockedState).execute(any(Game.class), any(GameAction.class));
     }
 
     @Test
-    void updateGameAfterSowingSeeds() {
-        when(seedsSower.sow(game, PIT_INDEX)).thenCallRealMethod();
+    void performsGameActionAgainstClonedInstanceOfGame() {
+        GameState mockedState = mock(GameState.class);
+        game.setGameState(mockedState);
+
+        when(gameRepository.findById(GAME_ID)).thenReturn(Optional.of(game));
+
+        gameService.makeMove(GAME_ID, PIT_INDEX);
+
+        verify(mockedState).execute(gameArgumentCaptor.capture(), any(GameAction.class));
+
+        Game clonedGame = gameArgumentCaptor.getValue();
+
+        assertThat(clonedGame.getId()).isEqualTo(game.getId());
+        assertThat(clonedGame.getCurrentPlayer()).isEqualTo(game.getCurrentPlayer());
+        assertThat(clonedGame.getPlayers()).isEqualTo(game.getPlayers());
+        assertThat(clonedGame.getPits()).isEqualTo(game.getPits());
+        assertThat(clonedGame.getStatus()).isEqualTo(game.getStatus());
+        assertThat(clonedGame.getWinner()).isEqualTo(game.getWinner());
+        assertThat(clonedGame.getGameState()).isEqualTo(game.getGameState());
+    }
+
+    @Test
+    void performsActionAgainstCorrectPitIndexWhenPerformingMove() {
+        GameState mockedState = mock(GameState.class);
+        game.setGameState(mockedState);
+
+        when(gameRepository.findById(GAME_ID)).thenReturn(Optional.of(game));
+
+        gameService.makeMove(GAME_ID, PIT_INDEX);
+
+        ArgumentCaptor<SowSeedsAction> gameActionArgumentCaptor = ArgumentCaptor.forClass(SowSeedsAction.class);
+        verify(mockedState).execute(any(Game.class), gameActionArgumentCaptor.capture());
+
+        SowSeedsAction sowSeedsAction = gameActionArgumentCaptor.getValue();
+        assertThat(sowSeedsAction.getPitIndex()).isEqualTo(PIT_INDEX);
+    }
+
+    @Test
+    void updateGameWhenPerformingPlayerMove() {
         when(gameRepository.findById(GAME_ID)).thenReturn(Optional.of(game));
 
         gameService.makeMove(GAME_ID, PIT_INDEX);
@@ -128,35 +160,13 @@ class GameServiceTest {
     }
 
     @Test
-    void currentPlayerRemainsTheSameWhenLastMoveLandedOnTheirOwnKalah() {
+    void returnsUpdatedGame() {
         when(gameRepository.findById(GAME_ID)).thenReturn(Optional.of(game));
-        SowingResult result = new SowingResult(emptyList(), new Pit(PitType.KALAH, 6));
-        when(seedsSower.sow(game, BoardSide.SOUTH.getFirstPitIndex())).thenReturn(result);
+        when(gameRepository.save(any(Game.class))).thenReturn(game);
 
-        gameService.makeMove(GAME_ID, BoardSide.SOUTH.getFirstPitIndex());
+        Game updatedGame = gameService.makeMove(GAME_ID, PIT_INDEX);
 
-        verify(gameRepository).save(gameArgumentCaptor.capture());
-
-        Game persistedGame = gameArgumentCaptor.getValue();
-
-        assertThat(persistedGame.getCurrentPlayer()).isEqualTo(game.getCurrentPlayer());
-    }
-
-    @Test
-    void currentPlayerChangesWhenLastSowedSeedsLandsOnRegularPit() {
-        Game game = new Game(FIRST_PLAYER_NAME, SECOND_PLAYER_NAME, SEEDS_PER_PIT);
-        when(gameRepository.findById(anyString())).thenReturn(Optional.of(game));
-
-        SowingResult result = new SowingResult(emptyList(), new Pit(PitType.REGULAR, 7, 7));
-        when(seedsSower.sow(game, BoardSide.SOUTH.getFirstPitIndex())).thenReturn(result);
-
-        gameService.makeMove(GAME_ID, BoardSide.SOUTH.getFirstPitIndex());
-
-        verify(gameRepository).save(gameArgumentCaptor.capture());
-
-        Game persistedGame = gameArgumentCaptor.getValue();
-
-        assertThat(persistedGame.getCurrentPlayer()).isEqualTo(game.getPlayers().get(1));
+        assertThat(updatedGame).isEqualTo(game);
     }
 
     @Test

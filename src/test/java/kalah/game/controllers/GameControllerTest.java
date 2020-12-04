@@ -117,7 +117,7 @@ class GameControllerTest {
     @Test
     void throwsInvalidMoveExceptionWhenPitIndexIsInvalid() {
         assertThatThrownBy(() -> controller.sow(GAME_ID, INVALID_PIT_INDEX))
-            .isExactlyInstanceOf(InvalidMoveException.class);
+                .isExactlyInstanceOf(InvalidMoveException.class);
     }
 
     @ParameterizedTest

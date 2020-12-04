@@ -1,4 +1,4 @@
-package kalah.game.seeds;
+package kalah.game.state.action;
 
 import kalah.game.models.Game;
 import kalah.game.models.Pit;
@@ -15,7 +15,7 @@ import static assertions.custom.PitAssert.assertThat;
 import static kalah.game.models.board.BoardSide.NORTH;
 import static kalah.game.models.board.BoardSide.SOUTH;
 
-class SeedsSowerTest {
+class SowSeedsActionTest {
 
     private static final int AMOUNT_OF_SEEDS = 6;
     private static final String PLAYER_SOUTH_OF_BOARD = "first_player";
@@ -27,11 +27,11 @@ class SeedsSowerTest {
     private List<Pit> pits;
     private Game game;
 
-    private SeedsSower seedsSower;
+    private SowSeedsAction sowAction;
 
     @BeforeEach
     void setUp() {
-        seedsSower = new SeedsSower();
+        sowAction = new SowSeedsAction(FIRST_PIT_ON_SOUTH_INDEX);
 
         pits = PitsInitializer.initializePits(AMOUNT_OF_SEEDS);
         game = new Game(PLAYER_SOUTH_OF_BOARD, PLAYER_NORTH_OF_BOARD, AMOUNT_OF_SEEDS);
@@ -39,27 +39,27 @@ class SeedsSowerTest {
 
     @Test
     void sowingPitOnIndexZeroForPlayerOnSouthEndsOnKalah() {
-        SowingResult sowedResult = seedsSower.sow(game, FIRST_PIT_ON_SOUTH_INDEX);
+        GameActionResult sowedResult = sowAction.performAction(game);
 
-        assertThat(sowedResult.getLastUpdatedPit()).isKalah()
+        assertThat(sowedResult.getLastUpdatedPit().get()).isKalah()
                 .indexIs(BoardSide.SOUTH.getKalahIndex())
                 .amountOfSeedsIs(1);
     }
 
     @Test
     void pitOnIndexZeroSeedsAfterSowing() {
-        SowingResult sowedResult = seedsSower.sow(game, FIRST_PIT_ON_SOUTH_INDEX);
+        GameActionResult sowedResult = sowAction.performAction(game);
 
-        Pit pitSowedFrom = sowedResult.getUpdatedPits().get(0);
+        Pit pitSowedFrom = sowedResult.getGame().getPits().get(0);
 
         assertThat(pitSowedFrom).hasZeroSeeds();
     }
 
     @Test
     void sowingPitOnIndexZeroForPlayerOnSouthDoesNotAffectNorthRowOnBoard() {
-        SowingResult sowedResult = seedsSower.sow(game, FIRST_PIT_ON_SOUTH_INDEX);
+        GameActionResult sowedResult = sowAction.performAction(game);
 
-        assertThat(sowedResult.getLastUpdatedPit())
+        assertThat(sowedResult.getLastUpdatedPit().get())
                 .isKalah()
                 .amountOfSeedsIs(1);
 
@@ -73,7 +73,8 @@ class SeedsSowerTest {
 
         Game game = Game.builder().currentPlayer(PLAYER_SOUTH).pits(pits).build();
 
-        SowingResult sowedResult = seedsSower.sow(game, 5);
+        SowSeedsAction sowSeedsAction = new SowSeedsAction(5);
+        GameActionResult sowedResult = sowSeedsAction.performAction(game);
 
         Pit opponentsKalah = pits.get(NORTH.getKalahIndex());
         assertThat(opponentsKalah).hasZeroSeeds();
@@ -83,7 +84,7 @@ class SeedsSowerTest {
         assertThat(pits.get(5)).hasZeroSeeds();
         assertThat(pits.get(2)).amountOfSeedsIs(2);
 
-        assertThat(sowedResult.getLastUpdatedPit()).indexIs(2);
+        assertThat(sowedResult.getLastUpdatedPit().get()).indexIs(2);
     }
 
     @Test
@@ -92,9 +93,11 @@ class SeedsSowerTest {
                 .currentPlayer(PLAYER_NORTH)
                 .pits(pits).build();
 
-        SowingResult sowedResult = seedsSower.sow(game, NORTH.getFirstPitIndex());
 
-        assertThat(sowedResult.getLastUpdatedPit())
+        SowSeedsAction sowSeedsAction = new SowSeedsAction(NORTH.getFirstPitIndex());
+        GameActionResult sowedResult = sowSeedsAction.performAction(game);
+
+        assertThat(sowedResult.getLastUpdatedPit().get())
                 .isKalah()
                 .amountOfSeedsIs(1)
                 .indexIs(NORTH.getKalahIndex());
@@ -106,9 +109,10 @@ class SeedsSowerTest {
                 .currentPlayer(PLAYER_NORTH)
                 .pits(pits).build();
 
-        SowingResult sowedResult = seedsSower.sow(game, NORTH.getFirstPitIndex());
+        SowSeedsAction sowSeedsAction = new SowSeedsAction(NORTH.getFirstPitIndex());
+        GameActionResult sowedResult = sowSeedsAction.performAction(game);
 
-        Pit pitSowedFrom = sowedResult.getUpdatedPits().get(NORTH.getFirstPitIndex());
+        Pit pitSowedFrom = sowedResult.getGame().getPits().get(NORTH.getFirstPitIndex());
 
         assertThat(pitSowedFrom).hasZeroSeeds();
     }
@@ -119,9 +123,11 @@ class SeedsSowerTest {
                 .currentPlayer(PLAYER_NORTH)
                 .pits(pits).build();
 
-        SowingResult sowedResult = seedsSower.sow(game, NORTH.getFirstPitIndex());
+        SowSeedsAction sowSeedsAction = new SowSeedsAction(NORTH.getFirstPitIndex());
+        GameActionResult sowedResult = sowSeedsAction.performAction(game);
 
-        assertThat(sowedResult.getLastUpdatedPit())
+
+        assertThat(sowedResult.getLastUpdatedPit().get())
                 .isKalah()
                 .amountOfSeedsIs(1);
 
@@ -137,7 +143,9 @@ class SeedsSowerTest {
                 .currentPlayer(PLAYER_NORTH)
                 .pits(pits).build();
 
-        SowingResult sowedResult = seedsSower.sow(game, 12);
+        SowSeedsAction sowSeedsAction = new SowSeedsAction(12);
+        GameActionResult sowedResult = sowSeedsAction.performAction(game);
+
 
         Pit opponentsKalah = pits.get(SOUTH.getKalahIndex());
         assertThat(opponentsKalah).hasZeroSeeds();
@@ -147,7 +155,7 @@ class SeedsSowerTest {
         assertThat(pits.get(12)).hasZeroSeeds();
         assertThat(pits.get(9)).amountOfSeedsIs(2);
 
-        assertThat(sowedResult.getLastUpdatedPit()).indexIs(9);
+        assertThat(sowedResult.getLastUpdatedPit().get()).indexIs(9);
     }
 
     @Test
@@ -159,14 +167,16 @@ class SeedsSowerTest {
                 .currentPlayer(PLAYER_SOUTH)
                 .pits(pits).build();
 
-        SowingResult sowedResult = seedsSower.sow(game, 5);
+        SowSeedsAction sowSeedsAction = new SowSeedsAction(5);
+        GameActionResult sowedResult = sowSeedsAction.performAction(game);
 
-        assertThat(sowedResult.getLastUpdatedPit()).indexIs(0).hasZeroSeeds();
+
+        assertThat(sowedResult.getLastUpdatedPit().get()).indexIs(0).hasZeroSeeds();
 
         Pit opponentsKalah = pits.get(SOUTH.getKalahIndex());
         assertThat(opponentsKalah).amountOfSeedsIs(9);
-        assertThat(sowedResult.getUpdatedPits().get(12)).hasZeroSeeds();
-        assertThat(sowedResult.getUpdatedPits().get(0)).hasZeroSeeds();
+        assertThat(sowedResult.getGame().getPits().get(12)).hasZeroSeeds();
+        assertThat(sowedResult.getGame().getPits().get(0)).hasZeroSeeds();
     }
 
     private void assertPitsAreCorrectlySetOnSideOfBoard(List<Pit> pits, BoardSide boardSide) {

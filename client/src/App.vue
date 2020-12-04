@@ -2,6 +2,8 @@
   <GamePage :current-player="currentPlayer"
             :players="players"
             :pits="pits"
+            :winner="winner"
+            :game-status="gameStatus"
             @pit-clicked="test($event)"
             :key="componentKey"/>
 </template>
@@ -21,7 +23,9 @@ export default {
       gameId: '',
       currentPlayer: '',
       players: [],
-      pits: []
+      pits: [],
+      gameStatus: '',
+      winner: ''
     }
   },
   beforeCreate() {
@@ -31,6 +35,8 @@ export default {
           this.currentPlayer = response.currentPlayer
           this.players = response.players
           this.pits = response.pits
+          this.gameStatus = response.gameStatus
+          this.winner = response.winner
           this.componentKey += 1;
         }).catch(err => {
       console.log(err);
@@ -44,6 +50,8 @@ export default {
             this.currentPlayer = response.currentPlayer
             this.players = response.players
             this.pits = response.pits
+            this.gameStatus = response.gameStatus
+            this.winner = response.winner
           });
     }
   }

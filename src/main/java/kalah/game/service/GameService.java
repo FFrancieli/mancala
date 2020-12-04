@@ -7,8 +7,8 @@ import kalah.game.models.Game;
 import kalah.game.models.Pit;
 import kalah.game.models.Player;
 import kalah.game.repository.GameRepository;
-import kalah.game.seeds.SeedsSower;
-import kalah.game.seeds.SowingResult;
+import kalah.game.state.GameState;
+import kalah.game.state.action.SowSeedsAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +19,10 @@ import static kalah.game.errorHandling.ApiErrorMessages.*;
 @Service
 public class GameService {
     private final GameRepository gameRepository;
-    private final SeedsSower seedsSower;
 
     @Autowired
-    public GameService(GameRepository gameRepository, SeedsSower seedsSower) {
+    public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
-        this.seedsSower = seedsSower;
     }
 
     public Game startGame(CreateNewGamePayload payload, int seedsPerPit) {
@@ -39,13 +37,10 @@ public class GameService {
         game.getPits().sort(Comparator.comparing(Pit::getIndex));
         validatePlayerMove(game, pitIndex);
 
-        SowingResult result = seedsSower.sow(game, pitIndex);
+        GameState gameState = game.getGameState();
+        Game updatedGame = gameState.execute(game.newInstance(), new SowSeedsAction(pitIndex));
 
-        if (!result.getLastUpdatedPit().isKalah()) {
-            game.setCurrentPlayer(game.getNextPlayer());
-        }
-
-        return gameRepository.save(game);
+        return gameRepository.save(updatedGame);
     }
 
     private Game retrieveGameById(String gameId) {

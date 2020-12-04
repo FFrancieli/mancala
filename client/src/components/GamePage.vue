@@ -1,7 +1,10 @@
 <template>
   <div class="container">
-    <div class="current-player">
+    <div v-if="gameStatus === 'ONGOING'" class="current-player">
       {{ currentPlayer }}'s turn
+    </div>
+    <div v-else class="current-player">
+      {{ winner }} won
     </div>
 
     <Board :current-player="currentPlayer"
@@ -37,6 +40,14 @@ export default {
       type: Array,
       required: true
     },
+    gameStatus: {
+      type: String,
+      required: true
+    },
+    winner: {
+      type: String,
+      required: false
+    }
   },
   methods: {
     sow() {
