@@ -155,6 +155,21 @@ class GameTest {
         assertThat(kalahOnNonEmptyRow.getAmountOfSeeds()).isEqualTo(SEEDS_ON_PIT * 6);
     }
 
+    @ParameterizedTest
+    @EnumSource(BoardSide.class)
+    void amountOfSeedsOnKalahIsIgnoredWhenCheckingIfRowIsEmpty(BoardSide boardSide) {
+        IntStream.iterate(boardSide.getFirstPitIndex(), i -> i + 1).limit(7)
+                .forEach(i -> game.getPits().get(i).removeAllSeeds());
+
+        game.getPits().get(boardSide.getKalahIndex()).addSeeds(45);
+
+        game.finish();
+
+        Pit kalahOnNonEmptyRow = game.getPits().get(boardSide.getOpositeSideKalahIndex());
+
+        assertThat(kalahOnNonEmptyRow.getAmountOfSeeds()).isEqualTo(SEEDS_ON_PIT * 6);
+    }
+
     @Test
     void firstPlayerWinsTheGameWhenThereAreMoreSeedsOnTheirKalah() {
         IntStream.iterate(BoardSide.NORTH.getFirstPitIndex(), i -> i + 1).limit(7)

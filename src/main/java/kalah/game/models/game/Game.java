@@ -1,9 +1,9 @@
 package kalah.game.models.game;
 
-import kalah.game.models.pit.Pit;
-import kalah.game.models.player.Player;
 import kalah.game.models.BoardSide;
+import kalah.game.models.pit.Pit;
 import kalah.game.models.pit.PitsInitializer;
+import kalah.game.models.player.Player;
 import kalah.game.state.GameState;
 import kalah.game.state.OngoingGameState;
 import lombok.*;
@@ -12,7 +12,6 @@ import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.function.Predicate;
 
 @Getter
 @RedisHash("Game")
@@ -20,9 +19,6 @@ import java.util.function.Predicate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class Game implements Serializable {
-    public static final Predicate<Pit> IS_PIT_ON_SOUTH_SIDE_OF_THE_BOARD = pit -> BoardSide.SOUTH.getKalahIndex() > pit.getIndex();
-    public static final Predicate<Pit> IS_PIT_ON_NORTH_SIDE_OF_THE_BOARD = pit -> pit.getIndex() < BoardSide.NORTH.getKalahIndex()
-            && pit.getIndex() >= BoardSide.NORTH.getFirstPitIndex();
 
     @Id
     private String id;
@@ -61,9 +57,9 @@ public class Game implements Serializable {
     }
 
     public Player getNextPlayer() {
-        int currentPlayerIndex = players.indexOf(currentPlayer);
+        int indexOfCurrentPlayer = players.indexOf(currentPlayer);
 
-        return players.get(1 >> currentPlayerIndex);
+        return players.get(1 >> indexOfCurrentPlayer);
     }
 
     public void setCurrentPlayer(Player currentPlayer) {
@@ -75,46 +71,47 @@ public class Game implements Serializable {
     }
 
     public boolean isAnyRowEmpty() {
-        return areAllPitsOnSouthEmpty() || areAllPitsOnNorthEmpty();
+        return areAllPitsInRowEmpty(BoardSide.SOUTH) || areAllPitsInRowEmpty(BoardSide.NORTH);
     }
 
     private boolean areAllPitsOnNorthEmpty() {
-        return allPitsEmpty(IS_PIT_ON_NORTH_SIDE_OF_THE_BOARD);
-    }
-
-    private boolean areAllPitsOnSouthEmpty() {
-        return allPitsEmpty(IS_PIT_ON_SOUTH_SIDE_OF_THE_BOARD);
-    }
-
-    private boolean allPitsEmpty(Predicate<Pit> predicate) {
-        return this.getPits().stream()
-                .filter(predicate)
-                .mapToInt(Pit::getAmountOfSeeds).sum() == 0;
+        return areAllPitsInRowEmpty(BoardSide.NORTH);
     }
 
     public boolean areAllPitsInRowEmpty(BoardSide boardSide) {
+        return calculateAmountOfSeedsOnRow(boardSide) == 0;
+    }
+
+    private int calculateAmountOfSeedsOnRow(BoardSide boardSide) {
         return this.getPits().stream()
-                .filter(pit -> pit.getIndex() >= boardSide.getFirstPitIndex() && pit.getIndex() <= boardSide.getKalahIndex())
-                .mapToInt(Pit::getAmountOfSeeds).sum() == 0;
+                .filter(pit -> pit.getIndex() >= boardSide.getFirstPitIndex()
+                        && pit.getIndex() < boardSide.getKalahIndex())
+                .mapToInt(Pit::getAmountOfSeeds).sum();
     }
 
     public void finish() {
         this.status = GameStatus.FINISHED;
 
         if (areAllPitsOnNorthEmpty()) {
-            int seedsLeftOnBoard = countSeedsOn(IS_PIT_ON_SOUTH_SIDE_OF_THE_BOARD);
-            this.pits.get(BoardSide.NORTH.getOpositeSideKalahIndex()).addSeeds(seedsLeftOnBoard);
+            captureSeedsIntoOppositeKalah(BoardSide.SOUTH);
         } else {
-            int seedsLeftOnBoard = countSeedsOn(IS_PIT_ON_NORTH_SIDE_OF_THE_BOARD);
-            this.pits.get(BoardSide.SOUTH.getOpositeSideKalahIndex()).addSeeds(seedsLeftOnBoard);
+            captureSeedsIntoOppositeKalah(BoardSide.NORTH);
         }
 
         clearAllPits();
         defineWinner();
     }
 
+    void captureSeedsIntoOppositeKalah(BoardSide boardSideWithSeeds) {
+        int seedsLeftOnBoard = calculateAmountOfSeedsOnRow(boardSideWithSeeds);
+
+        this.pits.get(boardSideWithSeeds.getKalahIndex()).addSeeds(seedsLeftOnBoard);
+    }
+
     void clearAllPits() {
-        this.pits.stream().filter(pit -> !pit.isKalah()).forEach(Pit::removeAllSeeds);
+        this.pits.stream()
+                .filter(pit -> !pit.isKalah())
+                .forEach(Pit::removeAllSeeds);
     }
 
     private void defineWinner() {
@@ -122,12 +119,6 @@ public class Game implements Serializable {
         int amountOfSeedsSouth = this.pits.get(BoardSide.SOUTH.getOpositeSideKalahIndex()).getAmountOfSeeds();
 
         this.winner = amountOfSeedsNorth > amountOfSeedsSouth ? players.get(0).getName() : players.get(1).getName();
-    }
-
-    private int countSeedsOn(Predicate<Pit> predicate) {
-        return this.pits.stream()
-                .filter(predicate)
-                .mapToInt(Pit::getAmountOfSeeds).sum();
     }
 
     public void setGameState(GameState gameState) {
