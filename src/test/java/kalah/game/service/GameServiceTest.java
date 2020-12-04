@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.UUID;
 
+import static kalah.game.models.board.BoardSide.SOUTH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -186,8 +187,8 @@ class GameServiceTest {
 
         when(gameRepository.findById(anyString())).thenReturn(Optional.of(game));
 
-        assertThatThrownBy(() -> gameService.makeMove(GAME_ID, PIT_INDEX_NORTH))
+        assertThatThrownBy(() -> gameService.makeMove(GAME_ID, SOUTH.getFirstPitIndex()))
                 .isExactlyInstanceOf(InvalidMoveException.class)
-                .hasMessage("Pit with id 8 is not assigned to firstPlayer");
+                .hasMessage("Cannot sow from empty pit. Pit on index 0 has 0 seeds");
     }
 }
