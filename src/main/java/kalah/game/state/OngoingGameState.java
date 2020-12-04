@@ -1,7 +1,7 @@
 package kalah.game.state;
 
-import kalah.game.models.Game;
-import kalah.game.models.board.BoardSide;
+import kalah.game.models.game.Game;
+import kalah.game.models.BoardSide;
 import kalah.game.state.action.FinishGameAction;
 import kalah.game.state.action.GameAction;
 import kalah.game.state.action.GameActionResult;

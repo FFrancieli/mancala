@@ -1,6 +1,6 @@
 package kalah.game.state.action;
 
-import kalah.game.models.Game;
+import kalah.game.models.game.Game;
 import kalah.game.state.FinishedGameState;
 
 public class FinishGameAction implements GameAction {

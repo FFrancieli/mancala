@@ -1,7 +1,9 @@
-package kalah.game.models;
+package kalah.game.models.game;
 
-import kalah.game.models.board.BoardSide;
-import kalah.game.models.board.PitsInitializer;
+import kalah.game.models.pit.Pit;
+import kalah.game.models.player.Player;
+import kalah.game.models.BoardSide;
+import kalah.game.models.pit.PitsInitializer;
 import kalah.game.state.GameState;
 import kalah.game.state.OngoingGameState;
 import lombok.*;

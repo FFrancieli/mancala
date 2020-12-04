@@ -2,9 +2,9 @@ package kalah.game.service;
 
 import kalah.game.errorHandling.exceptions.GameNotFoundException;
 import kalah.game.errorHandling.exceptions.InvalidMoveException;
-import kalah.game.models.CreateNewGamePayload;
-import kalah.game.models.Game;
-import kalah.game.models.Pit;
+import kalah.game.models.game.payloads.CreateNewGamePayload;
+import kalah.game.models.game.Game;
+import kalah.game.models.pit.Pit;
 import kalah.game.repository.GameRepository;
 import kalah.game.state.GameState;
 import kalah.game.state.action.GameAction;
@@ -20,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.UUID;
 
-import static kalah.game.models.board.BoardSide.SOUTH;
+import static kalah.game.models.BoardSide.SOUTH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;

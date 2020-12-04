@@ -1,7 +1,6 @@
-package kalah.game.models.payloads;
+package kalah.game.models.player;
 
-import kalah.game.models.Player;
-import kalah.game.models.board.BoardSide;
+import kalah.game.models.BoardSide;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

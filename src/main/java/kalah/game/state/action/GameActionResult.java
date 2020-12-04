@@ -1,7 +1,7 @@
 package kalah.game.state.action;
 
-import kalah.game.models.Game;
-import kalah.game.models.Pit;
+import kalah.game.models.game.Game;
+import kalah.game.models.pit.Pit;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 

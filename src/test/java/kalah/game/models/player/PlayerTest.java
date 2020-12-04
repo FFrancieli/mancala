@@ -1,6 +1,8 @@
-package kalah.game.models;
+package kalah.game.models.player;
 
-import kalah.game.models.board.BoardSide;
+import kalah.game.models.BoardSide;
+import kalah.game.models.pit.Pit;
+import kalah.game.models.pit.PitType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

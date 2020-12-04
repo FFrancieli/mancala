@@ -1,4 +1,4 @@
-package kalah.game.models.board;
+package kalah.game.models;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

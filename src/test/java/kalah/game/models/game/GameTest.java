@@ -1,7 +1,9 @@
-package kalah.game.models;
+package kalah.game.models.game;
 
 import assertions.custom.PitAssert;
-import kalah.game.models.board.BoardSide;
+import kalah.game.models.pit.Pit;
+import kalah.game.models.player.Player;
+import kalah.game.models.BoardSide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

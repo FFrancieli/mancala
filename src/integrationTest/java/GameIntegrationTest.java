@@ -2,11 +2,11 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import kalah.game.KalahApplication;
-import kalah.game.models.CreateNewGamePayload;
-import kalah.game.models.board.BoardSide;
-import kalah.game.models.payloads.GamePayload;
-import kalah.game.models.payloads.PitPayload;
-import kalah.game.models.payloads.PlayerPayload;
+import kalah.game.models.game.payloads.CreateNewGamePayload;
+import kalah.game.models.BoardSide;
+import kalah.game.models.game.payloads.GamePayload;
+import kalah.game.models.pit.PitPayload;
+import kalah.game.models.player.PlayerPayload;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,8 +25,8 @@ import java.util.stream.IntStream;
 
 import static io.restassured.RestAssured.DEFAULT_PORT;
 import static io.restassured.RestAssured.given;
-import static kalah.game.models.board.BoardSide.NORTH;
-import static kalah.game.models.board.BoardSide.SOUTH;
+import static kalah.game.models.BoardSide.NORTH;
+import static kalah.game.models.BoardSide.SOUTH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 

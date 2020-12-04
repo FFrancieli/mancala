@@ -1,6 +1,7 @@
-package kalah.game.models;
+package kalah.game.models.pit;
 
-import kalah.game.models.board.BoardSide;
+import kalah.game.models.player.Player;
+import kalah.game.models.BoardSide;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;

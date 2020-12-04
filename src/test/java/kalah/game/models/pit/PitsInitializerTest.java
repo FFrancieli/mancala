@@ -1,14 +1,13 @@
-package kalah.game.models.board;
+package kalah.game.models.pit;
 
-import kalah.game.models.Pit;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static assertions.custom.PitAssert.assertThat;
-import static kalah.game.models.board.BoardSide.NORTH;
-import static kalah.game.models.board.BoardSide.SOUTH;
+import static kalah.game.models.BoardSide.NORTH;
+import static kalah.game.models.BoardSide.SOUTH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PitsInitializerTest {

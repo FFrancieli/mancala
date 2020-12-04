@@ -1,10 +1,10 @@
 package kalah.game.state.action;
 
-import kalah.game.models.Game;
-import kalah.game.models.Pit;
-import kalah.game.models.Player;
-import kalah.game.models.board.BoardSide;
-import kalah.game.models.board.PitsInitializer;
+import kalah.game.models.player.Player;
+import kalah.game.models.BoardSide;
+import kalah.game.models.game.Game;
+import kalah.game.models.pit.Pit;
+import kalah.game.models.pit.PitsInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static assertions.custom.PitAssert.assertThat;
-import static kalah.game.models.board.BoardSide.NORTH;
-import static kalah.game.models.board.BoardSide.SOUTH;
+import static kalah.game.models.BoardSide.NORTH;
+import static kalah.game.models.BoardSide.SOUTH;
 
 class SowSeedsActionTest {
 

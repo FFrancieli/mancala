@@ -1,9 +1,11 @@
-package kalah.game.models.payloads;
+package kalah.game.models.game.payloads;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import kalah.game.models.Game;
-import kalah.game.models.GameStatus;
+import kalah.game.models.game.Game;
+import kalah.game.models.game.GameStatus;
+import kalah.game.models.pit.PitPayload;
+import kalah.game.models.player.PlayerPayload;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.ResponseBody;
 

@@ -1,4 +1,4 @@
-package kalah.game.models;
+package kalah.game.models.pit;
 
 public enum PitType {
     REGULAR, KALAH;

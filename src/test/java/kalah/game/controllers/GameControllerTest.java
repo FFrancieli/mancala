@@ -1,12 +1,12 @@
 package kalah.game.controllers;
 
 import kalah.game.errorHandling.exceptions.InvalidMoveException;
-import kalah.game.models.CreateNewGamePayload;
-import kalah.game.models.Game;
-import kalah.game.models.board.BoardSide;
-import kalah.game.models.payloads.GamePayload;
-import kalah.game.models.payloads.PitPayload;
-import kalah.game.models.payloads.PlayerPayload;
+import kalah.game.models.game.payloads.CreateNewGamePayload;
+import kalah.game.models.game.Game;
+import kalah.game.models.BoardSide;
+import kalah.game.models.game.payloads.GamePayload;
+import kalah.game.models.pit.PitPayload;
+import kalah.game.models.player.PlayerPayload;
 import kalah.game.service.GameService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

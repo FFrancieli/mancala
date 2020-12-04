@@ -1,7 +1,7 @@
 package assertions.custom;
 
-import kalah.game.models.Pit;
-import kalah.game.models.PitType;
+import kalah.game.models.pit.Pit;
+import kalah.game.models.pit.PitType;
 import org.assertj.core.api.AbstractAssert;
 
 public class PitAssert extends AbstractAssert<PitAssert, Pit> {

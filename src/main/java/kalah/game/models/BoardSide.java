@@ -1,4 +1,4 @@
-package kalah.game.models.board;
+package kalah.game.models;
 
 import java.util.EnumSet;
 

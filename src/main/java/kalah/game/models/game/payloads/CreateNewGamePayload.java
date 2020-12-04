@@ -1,4 +1,4 @@
-package kalah.game.models;
+package kalah.game.models.game.payloads;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

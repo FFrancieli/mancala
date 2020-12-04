@@ -1,7 +1,6 @@
-package kalah.game.models.payloads;
+package kalah.game.models.player;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import kalah.game.models.Player;
 import lombok.Getter;
 
 @Getter

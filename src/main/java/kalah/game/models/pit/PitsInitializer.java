@@ -1,7 +1,6 @@
-package kalah.game.models.board;
+package kalah.game.models.pit;
 
-import kalah.game.models.Pit;
-import kalah.game.models.PitType;
+import kalah.game.models.BoardSide;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

@@ -1,8 +1,8 @@
 package kalah.game.state.action;
 
-import kalah.game.models.Game;
-import kalah.game.models.Pit;
-import kalah.game.models.Player;
+import kalah.game.models.game.Game;
+import kalah.game.models.pit.Pit;
+import kalah.game.models.player.Player;
 import lombok.Getter;
 
 import java.util.List;
