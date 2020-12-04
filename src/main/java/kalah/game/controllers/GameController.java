@@ -1,9 +1,12 @@
 package kalah.game.controllers;
 
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import kalah.game.errorHandling.ApiError;
 import kalah.game.errorHandling.exceptions.InvalidMoveException;
-import kalah.game.models.game.payloads.CreateNewGamePayload;
-import kalah.game.models.game.Game;
 import kalah.game.models.BoardSide;
+import kalah.game.models.game.Game;
+import kalah.game.models.game.payloads.CreateNewGamePayload;
 import kalah.game.models.game.payloads.GamePayload;
 import kalah.game.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +40,13 @@ public class GameController {
 
     @PutMapping("/{gameId}")
     @ResponseStatus(code = HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Player move performed successfully"),
+            @ApiResponse(code = 400, message = "Pit index is invalid", response = ApiError.class),
+            @ApiResponse(code = 400, message = "Game with given gameId was not found", response = ApiError.class),
+            @ApiResponse(code = 409, message = "Received request is correct but move conflicts with game rules",
+                    response = ApiError.class)
+    })
     public GamePayload sow(@PathVariable("gameId") String gameId, @RequestParam("pitIndex") int pitIndex) {
         validatePitIndex(pitIndex);
 
