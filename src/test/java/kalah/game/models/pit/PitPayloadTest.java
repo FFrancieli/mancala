@@ -1,8 +1,5 @@
 package kalah.game.models.pit;
 
-import kalah.game.models.pit.Pit;
-import kalah.game.models.pit.PitPayload;
-import kalah.game.models.pit.PitType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
