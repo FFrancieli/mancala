@@ -10,6 +10,7 @@ import kalah.game.models.game.payloads.CreateNewGamePayload;
 import kalah.game.models.game.payloads.GamePayload;
 import kalah.game.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,9 @@ import static kalah.game.errorHandling.ApiErrorMessages.SOWING_FROM_KALAH;
 @RestController
 @RequestMapping("/api/game")
 public class GameController {
-    private static final int SEEDS_PER_PIT = 6;
+
+    @Value("${kalah.default.seeds:6}")
+    private int seedsPerPit;
 
     private final GameService gameService;
 
@@ -33,7 +36,7 @@ public class GameController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public GamePayload createNewGame(@Valid @RequestBody CreateNewGamePayload createNewGamePayload) {
-        Game game = gameService.startGame(createNewGamePayload, SEEDS_PER_PIT);
+        Game game = gameService.startGame(createNewGamePayload, seedsPerPit);
 
         return GamePayload.fromEnity(game);
     }

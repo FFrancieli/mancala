@@ -1,9 +1,9 @@
 package kalah.game.controllers;
 
 import kalah.game.errorHandling.exceptions.InvalidMoveException;
-import kalah.game.models.game.payloads.CreateNewGamePayload;
-import kalah.game.models.game.Game;
 import kalah.game.models.BoardSide;
+import kalah.game.models.game.Game;
+import kalah.game.models.game.payloads.CreateNewGamePayload;
 import kalah.game.models.game.payloads.GamePayload;
 import kalah.game.models.pit.PitPayload;
 import kalah.game.models.player.PlayerPayload;
@@ -15,6 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,6 +45,7 @@ class GameControllerTest {
     @BeforeEach
     void setUp() {
         controller = new GameController(gameService);
+        ReflectionTestUtils.setField(controller, "seedsPerPit", 6);
     }
 
     @Test

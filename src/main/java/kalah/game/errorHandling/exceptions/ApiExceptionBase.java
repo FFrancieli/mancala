@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class ApiExceptionBase extends RuntimeException {
 
-    private String error;
-    private HttpStatus httpStatus;
+    private final String error;
+    private final HttpStatus httpStatus;
 
     public ApiExceptionBase(String message, String error, HttpStatus httpStatus) {
         super(message);
