@@ -1,8 +1,10 @@
 package kalah.game.errorHandling.exceptions;
 
 import kalah.game.errorHandling.ApiError;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class ApiExceptionBase extends RuntimeException {
 
     private String error;
@@ -16,9 +18,5 @@ public class ApiExceptionBase extends RuntimeException {
 
     public ApiError toError() {
         return new ApiError(super.getMessage(), error);
-    }
-
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
     }
 }
