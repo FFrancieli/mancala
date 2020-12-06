@@ -2,8 +2,8 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import kalah.game.KalahApplication;
-import kalah.game.models.game.payloads.CreateNewGamePayload;
 import kalah.game.models.BoardSide;
+import kalah.game.models.game.payloads.CreateNewGamePayload;
 import kalah.game.models.game.payloads.GamePayload;
 import kalah.game.models.pit.PitPayload;
 import kalah.game.models.player.PlayerPayload;
@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import redis.embedded.RedisServer;
 
@@ -33,6 +34,7 @@ import static org.hamcrest.Matchers.equalTo;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
 @SpringBootTest(classes = {KalahApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@TestPropertySource(locations = "classpath:application_test.properties")
 class GameIntegrationTest {
     private static RedisServer redisServer;
 
