@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import kalah.game.errorHandling.ApiError;
 import kalah.game.errorHandling.exceptions.InvalidMoveException;
+import kalah.game.errorHandling.exceptions.InvalidPitIndexException;
 import kalah.game.models.BoardSide;
 import kalah.game.models.game.Game;
 import kalah.game.models.game.payloads.CreateNewGamePayload;
@@ -60,7 +61,7 @@ public class GameController {
 
     private void validatePitIndex(int pitIndex) {
         if (pitIndex > 13) {
-            throw new InvalidMoveException(String.format(INVALID_PIT_INDEX.getMessage(), pitIndex), INVALID_PIT_INDEX.getError());
+            throw new InvalidPitIndexException(String.format(INVALID_PIT_INDEX.getMessage(), pitIndex), INVALID_PIT_INDEX.getError());
         }
 
         if (pitIndex == BoardSide.NORTH.getKalahIndex() || pitIndex == BoardSide.SOUTH.getKalahIndex()) {

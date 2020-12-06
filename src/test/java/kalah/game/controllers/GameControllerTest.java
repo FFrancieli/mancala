@@ -1,6 +1,7 @@
 package kalah.game.controllers;
 
 import kalah.game.errorHandling.exceptions.InvalidMoveException;
+import kalah.game.errorHandling.exceptions.InvalidPitIndexException;
 import kalah.game.models.BoardSide;
 import kalah.game.models.game.Game;
 import kalah.game.models.game.payloads.CreateNewGamePayload;
@@ -117,9 +118,9 @@ class GameControllerTest {
     }
 
     @Test
-    void throwsInvalidMoveExceptionWhenPitIndexIsInvalid() {
+    void throwsInvalidPitIndexExceptionWhenPitIndexIsInvalid() {
         assertThatThrownBy(() -> controller.sow(GAME_ID, INVALID_PIT_INDEX))
-                .isExactlyInstanceOf(InvalidMoveException.class);
+                .isExactlyInstanceOf(InvalidPitIndexException.class);
     }
 
     @ParameterizedTest

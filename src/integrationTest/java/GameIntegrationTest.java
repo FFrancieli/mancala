@@ -60,11 +60,6 @@ class GameIntegrationTest {
         RestAssured.port = DEFAULT_PORT;
 
         redisServer = new RedisServer();
-        try {
-            redisServer.start();
-        } catch (RuntimeException exception) {
-            redisServer.stop();
-        }
     }
 
     @Test
@@ -129,7 +124,7 @@ class GameIntegrationTest {
                 .when()
                 .put(SOW_ENDPOINT, INVALID_GAME_ID)
                 .then()
-                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .statusCode(HttpStatus.CONFLICT.value())
                 .body("message", equalTo("Pit index must be between 0 and 5 or 7 and 12. Received value: " + kalahIndex))
                 .body("error", equalTo("AttemptToSowFromKalah"));
     }
@@ -144,7 +139,7 @@ class GameIntegrationTest {
                 .when()
                 .put(SOW_ENDPOINT, gameId)
                 .then()
-                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .statusCode(HttpStatus.CONFLICT.value())
                 .body("message", equalTo(String.format("Pit with id %s is not assigned to Jane", PIT_INDEX_ON_NORTH_OF_BOARD)))
                 .body("error", equalTo("PitNotAssignedToPlayer"));
     }
