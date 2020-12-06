@@ -17,8 +17,6 @@
 
 <script>
 import Board from "@/components/Board";
-import gameService from '@/services/GameService'
-
 
 export default {
   name: "GamePage",
