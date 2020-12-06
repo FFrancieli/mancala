@@ -28,11 +28,6 @@ export default {
     isPlayerTurn() {
       return this.assignedToPlayer === this.currentPlayer;
     }
-  },
-  methods: {
-    test(event) {
-      this.$emit('pit-clicked', event.target.id);
-    }
   }
 }
 </script>

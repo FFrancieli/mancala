@@ -10,7 +10,7 @@
     <Board :current-player="currentPlayer"
            :players="players"
            :pits="pits"
-           @pit-clicked="test($event)"/>
+           @pit-clicked="notifyPitClicked($event)"/>
 
   </div>
 </template>
@@ -50,10 +50,7 @@ export default {
     }
   },
   methods: {
-    sow() {
-      gameService.sowSeeds(this.gameId, 0);
-    },
-    test(pitId) {
+    notifyPitClicked(pitId) {
       this.$emit('pit-clicked', pitId);
     }
   },
