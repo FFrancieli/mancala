@@ -1,25 +1,26 @@
 package kalah.game.models.pit;
 
-import org.junit.jupiter.api.Test;
+import kalah.game.models.BoardSide;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static assertions.custom.PitAssert.assertThat;
-import static kalah.game.models.BoardSide.NORTH;
-import static kalah.game.models.BoardSide.SOUTH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PitsInitializerTest {
 
     private static final int NUMBER_OF_SEEDS_PER_PIT = 6;
 
-    @Test
-    void hasSixPitsForSouthSideOfTheBoard() {
+    @ParameterizedTest
+    @EnumSource(BoardSide.class)
+    void hasSixPitsOnEachSideOfTheBoard(BoardSide boardSide) {
         List<Pit> pits = PitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
         assertThat(pits).hasSize(14);
 
-        IntStream.range(SOUTH.getFirstPitIndex(), SOUTH.getKalahIndex())
+        IntStream.range(boardSide.getFirstPitIndex(), boardSide.getKalahIndex())
                 .forEach(index -> {
                     assertThat(pits.get(index))
                             .isRegularPit()
@@ -28,41 +29,16 @@ class PitsInitializerTest {
                 });
     }
 
-    @Test
-    void hasOneKalahOnSouthSideOfTheBoard() {
+    @ParameterizedTest
+    @EnumSource(BoardSide.class)
+    void hasOneKalahAssignedToEachSideOfTheBoard(BoardSide boardSide) {
         List<Pit> pits = PitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
 
-        Pit kalah = pits.get(SOUTH.getKalahIndex());
+        Pit kalah = pits.get(boardSide.getKalahIndex());
 
         assertThat(kalah)
                 .hasZeroSeeds()
-                .indexIs(SOUTH.getKalahIndex())
-                .isKalah();
-    }
-
-    @Test
-    void hasSixPitsForNorthSideOfTheBoard() {
-        List<Pit> pits = PitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
-        assertThat(pits).hasSize(14);
-
-        IntStream.range(NORTH.getFirstPitIndex(), NORTH.getKalahIndex())
-                .forEach(index -> {
-                    assertThat(pits.get(index))
-                            .isRegularPit()
-                            .amountOfSeedsIs(NUMBER_OF_SEEDS_PER_PIT)
-                            .indexIs(index);
-                });
-    }
-
-    @Test
-    void hasOneKalahOnNorthSideOfTheBoard() {
-        List<Pit> pits = PitsInitializer.initializePits(NUMBER_OF_SEEDS_PER_PIT);
-
-        Pit kalah = pits.get(NORTH.getKalahIndex());
-
-        assertThat(kalah)
-                .hasZeroSeeds()
-                .indexIs(NORTH.getKalahIndex())
+                .indexIs(boardSide.getKalahIndex())
                 .isKalah();
     }
 }
